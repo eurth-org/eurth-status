@@ -10,7 +10,7 @@ const pageConfig: PageConfig = {
   title: "Eurth Community Status Page",
   // Links shown at the header of your status page, could set `highlight` to `true`
   links: [
-    { link: 'https://github.com/stijn/UptimeFlare', label: 'GitHub' },
+    { link: 'https://github.com/eurth-org/eurth-status', label: 'GitHub' },
     { link: 'https://eurth.org/', label: 'Forum' },
     { link: 'mailto:orioni.europa@gmail.com', label: 'Email Me', highlight: true },
   ],
@@ -39,7 +39,45 @@ const workerConfig: WorkerConfig = {
     }, // <-- Closes the first monitor object
 
     // -------------------------------------
-    // Monitor 2: europans_homepage
+    // Monitor 2: eurth_map
+    // -------------------------------------
+    {
+      id: 'eurth_map',
+      name: 'map.eurth.org',
+      method: 'GET',
+      target: 'https://map.eurth.org',
+      checkProxy: 'worker://weur',
+      tooltip: 'Map subdomain monitor',
+      statusPageLink: 'https://https://map.eurth.org',
+      expectedCodes: [200],
+      timeout: 10000,
+      headers: {
+        'User-Agent': 'Uptimeflare',
+        Authorization: 'Bearer YOUR_TOKEN_HERE',
+      }, // <-- Closes the headers object
+    }, // <-- Closes the second monitor object
+
+    // -------------------------------------
+    // Monitor 3: eurth_news
+    // -------------------------------------
+    {
+      id: 'eurth_news',
+      name: 'news.eurth.org',
+      method: 'GET',
+      target: 'https://news.eurth.org',
+      checkProxy: 'worker://weur',
+      tooltip: 'News subdomain monitor',
+      statusPageLink: 'https://https://news.eurth.org',
+      expectedCodes: [200],
+      timeout: 10000,
+      headers: {
+        'User-Agent': 'Uptimeflare',
+        Authorization: 'Bearer YOUR_TOKEN_HERE',
+      }, // <-- Closes the headers object
+    }, // <-- Closes the second monitor object
+
+    // -------------------------------------
+    // Monitor 4: europans_homepage
     // -------------------------------------
     {
       id: 'europans_homepage',
@@ -56,7 +94,7 @@ const workerConfig: WorkerConfig = {
         Authorization: 'Bearer YOUR_TOKEN_HERE',
       }, // <-- Closes the headers object
     }, // <-- Closes the second monitor object
-
+    
   ], // <-- Closes the monitors array
 
   // [Optional] Notification settings
