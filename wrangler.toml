@@ -1,4 +1,5 @@
-name = "uptimeflare"
+# wrangler.toml
+name = "eurth-status"
 compatibility_date = "2025-04-02"
 compatibility_flags = [ "nodejs_compat" ]
 
