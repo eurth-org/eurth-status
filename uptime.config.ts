@@ -48,7 +48,7 @@ const workerConfig: WorkerConfig = {
       target: 'https://map.eurth.org',
       checkProxy: 'worker://weur',
       tooltip: 'Map subdomain monitor',
-      statusPageLink: 'https://https://map.eurth.org',
+      statusPageLink: 'https://map.eurth.org',
       expectedCodes: [200],
       timeout: 10000,
       headers: {
@@ -67,7 +67,7 @@ const workerConfig: WorkerConfig = {
       target: 'https://news.eurth.org',
       checkProxy: 'worker://weur',
       tooltip: 'News subdomain monitor',
-      statusPageLink: 'https://https://news.eurth.org',
+      statusPageLink: 'https://news.eurth.org',
       expectedCodes: [200],
       timeout: 10000,
       headers: {
