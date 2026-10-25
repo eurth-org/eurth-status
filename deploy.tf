@@ -31,7 +31,7 @@ resource "cloudflare_d1_database" "uptimeflare_d1" {
 
 resource "cloudflare_workers_script" "uptimeflare_worker" {
   account_id          = var.CLOUDFLARE_ACCOUNT_ID
-  script_name         = "uptimeflare_worker"
+  script_name         = "eurth-status"
   main_module         = "worker/dist/index.js"
   content_file        = "worker/dist/index.js"
   content_sha256      = filesha256("worker/dist/index.js")
