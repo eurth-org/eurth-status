@@ -81,17 +81,17 @@ jobs:
           DO_RESP=$(curl "https://api.cloudflare.com/client/v4/accounts/$TF_VAR_CLOUDFLARE_ACCOUNT_ID/workers/durable_objects/namespaces?per_page=1000" \
             -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN")
 
-          if echo "$DO_RESP" | jq -e '.result[] | select(.script == "uptimeflare_worker" and .class == "RemoteChecker")' > /dev/null; then
-            echo "Existing Durable Object namespace found for uptimeflare_worker RemoteChecker. No migration needed."
+          if echo "$DO_RESP" | jq -e '.result[] | select(.script == "eurth-status" and .class == "RemoteChecker")' > /dev/null; then
+            echo "Existing Durable Object namespace found for eurth-status RemoteChecker. No migration needed."
           else
-            echo "No existing Durable Object namespace found for uptimeflare_worker RemoteChecker. Need migration."
+            echo "No existing Durable Object namespace found for eurth-status RemoteChecker. Need migration."
             export TF_VAR_enable_do_migration=true
           fi
 
           echo "Try importing existing resources..."
           terraform import cloudflare_d1_database.uptimeflare_d1 "$TF_VAR_CLOUDFLARE_ACCOUNT_ID/$D1_ID"
-          terraform import cloudflare_workers_script.uptimeflare_worker "$TF_VAR_CLOUDFLARE_ACCOUNT_ID/uptimeflare_worker" || echo "WARNING: Worker script import failed, continuing..."
-          terraform import cloudflare_workers_cron_trigger.uptimeflare_worker_cron "$TF_VAR_CLOUDFLARE_ACCOUNT_ID/uptimeflare_worker" || echo "WARNING: Cron trigger import failed, continuing..."
+          terraform import cloudflare_workers_script.uptimeflare_worker "$TF_VAR_CLOUDFLARE_ACCOUNT_ID/eurth-status" || echo "WARNING: Worker script import failed, continuing..."
+          terraform import cloudflare_workers_cron_trigger.uptimeflare_worker_cron "$TF_VAR_CLOUDFLARE_ACCOUNT_ID/eurth-status" || echo "WARNING: Cron trigger import failed, continuing..."
           terraform import cloudflare_pages_project.uptimeflare "$TF_VAR_CLOUDFLARE_ACCOUNT_ID/uptimeflare" || echo "WARNING: Pages project import failed, continuing..."
 
           terraform apply -auto-approve -input=false
