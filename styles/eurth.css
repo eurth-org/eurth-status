@@ -1,0 +1,332 @@
+/* Eurth theme: the "Mission Control" console look.
+   Lives in its own file so upstream UptimeFlare merges stay conflict-free: it styles the
+   upstream components from outside, through Mantine's static class names and plain elements.
+   Single dark look by choice: a console is dark in any room. */
+
+:root {
+  --eurth-room: #0a161d; /* console background */
+  --eurth-panel: #0f212a; /* instrument bezel */
+  --eurth-raised: #132a35; /* hover */
+  --eurth-deep: #07121a; /* readout wells */
+  --eurth-rule: #1e3a47; /* grid and dividers */
+  --eurth-ink: #d6e5ea; /* console text */
+  --eurth-dim: #7f9ba6; /* secondary readouts */
+  --eurth-off: #4b6470; /* no data */
+  --eurth-amber: #f2b33d; /* data blocks, highlights */
+  --eurth-scope: #5fd4e6; /* radar phosphor, links */
+  --eurth-ok: #5ad08c;
+  --eurth-bad: #ff5b47;
+  color-scheme: dark;
+}
+
+body {
+  background-color: var(--eurth-room);
+  background-image: linear-gradient(rgba(30, 58, 71, 0.28) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(30, 58, 71, 0.28) 1px, transparent 1px);
+  background-size: 48px 48px;
+  background-position: -1px -1px;
+  color: var(--eurth-ink);
+}
+
+::selection {
+  background: var(--eurth-amber);
+  color: #1b1306;
+}
+
+:focus-visible {
+  outline: 2px solid var(--eurth-amber);
+  outline-offset: 2px;
+}
+
+/* The pages put Inter on <main> through a class; the attribute selector outranks it */
+main[class] {
+  font-family: var(--eurth-body);
+  padding-bottom: 40px;
+}
+
+/* ---------- header: the console status bar ---------- */
+
+main > header[class] {
+  height: auto;
+  margin-bottom: 56px;
+  background: var(--eurth-panel);
+  border-bottom: 2px solid var(--eurth-amber);
+}
+
+main > header[class] > .mantine-Container-root {
+  height: 64px;
+}
+
+/* "STATUS" tag beside the logo, like the artifact's "Mission Control" title */
+main > header[class] > .mantine-Container-root > div:first-child {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+main > header[class] > .mantine-Container-root > div:first-child::after {
+  content: 'Status';
+  font-family: var(--eurth-display);
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--eurth-amber);
+}
+
+@media (max-width: 48em) {
+  main > header[class] > .mantine-Container-root > div:first-child::after {
+    display: none;
+  }
+}
+
+[data-mantine-color-scheme] main > header a[class] {
+  font-family: var(--eurth-display);
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--eurth-dim);
+  padding: 7px 12px;
+  border-radius: 2px;
+}
+
+[data-mantine-color-scheme] main > header a[class]:hover {
+  color: var(--eurth-ink);
+  background: var(--eurth-raised);
+}
+
+[data-mantine-color-scheme] main > header a[class][data-active] {
+  background: var(--eurth-amber);
+  color: #1b1306;
+}
+
+[data-mantine-color-scheme] main > header a[class][data-active]:hover {
+  background: #f5c24a;
+}
+
+/* ---------- overall status ---------- */
+
+[data-mantine-color-scheme] main h1.mantine-Title-root {
+  font-family: var(--eurth-display);
+  font-size: clamp(30px, 6vw, 46px);
+  line-height: 1.05;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-wrap: balance;
+  color: var(--eurth-ink);
+}
+
+[data-mantine-color-scheme] main h5.mantine-Title-root {
+  font-family: var(--eurth-mono);
+  font-weight: 400;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--eurth-dim) !important;
+}
+
+/* status icons carry inline colours; bring them onto the console palette */
+main .tabler-icon-circle-check {
+  color: var(--eurth-ok) !important;
+}
+main .tabler-icon-alert-circle {
+  color: var(--eurth-bad) !important;
+}
+main .tabler-icon-alert-triangle {
+  color: var(--eurth-amber) !important;
+}
+
+main .mantine-Container-root > .mantine-Center-root > .tabler-icon {
+  filter: drop-shadow(0 0 12px currentColor);
+}
+
+/* ---------- monitor groups: instrument bezels ---------- */
+
+[data-mantine-color-scheme] main .mantine-Card-root {
+  background: transparent;
+  box-shadow: none;
+  max-width: calc(100% - 32px);
+}
+
+[data-mantine-color-scheme] .mantine-Accordion-item {
+  background: var(--eurth-panel) !important;
+  border: 1px solid var(--eurth-rule) !important;
+  border-radius: 3px !important;
+}
+
+[data-mantine-color-scheme] .mantine-Accordion-item + .mantine-Accordion-item {
+  margin-top: 16px;
+}
+
+[data-mantine-color-scheme] .mantine-Accordion-control {
+  padding-inline: 16px 12px;
+  border-radius: 3px;
+}
+
+[data-mantine-color-scheme] .mantine-Accordion-item[data-active] .mantine-Accordion-control {
+  border-bottom: 1px solid var(--eurth-rule);
+  border-radius: 3px 3px 0 0;
+}
+
+[data-mantine-color-scheme] .mantine-Accordion-control:hover {
+  background: var(--eurth-raised);
+}
+
+[data-mantine-color-scheme] .mantine-Accordion-label {
+  font-family: var(--eurth-display);
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 1;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--eurth-ink);
+}
+
+[data-mantine-color-scheme] .mantine-Accordion-label .mantine-Text-root {
+  font-family: var(--eurth-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+
+[data-mantine-color-scheme] .mantine-Accordion-chevron {
+  color: var(--eurth-dim);
+}
+
+/* one monitor per row, ruled like a departures board */
+[data-mantine-color-scheme] .mantine-Accordion-content > div + div {
+  border-top: 1px solid var(--eurth-rule);
+  margin-top: 14px;
+}
+
+[data-mantine-color-scheme] .mantine-Card-section .mantine-Text-root {
+  font-family: var(--eurth-mono);
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
+[data-mantine-color-scheme] .mantine-Card-section a {
+  color: var(--eurth-ink) !important;
+  text-decoration: none;
+}
+
+[data-mantine-color-scheme] .mantine-Card-section a::after {
+  content: '↗';
+  margin-left: 6px;
+  color: var(--eurth-dim);
+  font-weight: 400;
+}
+
+[data-mantine-color-scheme] .mantine-Card-section a:hover {
+  color: var(--eurth-scope) !important;
+}
+
+[data-mantine-color-scheme] .mantine-Card-section a:hover::after {
+  color: var(--eurth-scope);
+}
+
+/* Upstream sets status colours inline (util/color.ts, MonitorList.tsx). These map them
+   onto the console palette; if upstream changes its colours, its own ones simply show. */
+main [style*='color: rgb(5, 150, 105)'],
+main [style*='color: rgb(59, 214, 113)'] {
+  color: var(--eurth-ok) !important;
+}
+main [style*='color: rgb(242, 144, 48)'] {
+  color: var(--eurth-amber) !important;
+}
+main [style*='color: rgb(223, 72, 74)'] {
+  color: var(--eurth-bad) !important;
+}
+main [style*='background: rgb(59, 214, 113)'] {
+  background: var(--eurth-ok) !important;
+}
+main [style*='background: rgb(242, 144, 48)'] {
+  background: var(--eurth-amber) !important;
+}
+main [style*='background: rgb(223, 72, 74)'] {
+  background: var(--eurth-bad) !important;
+}
+main [style*='background: gray'] {
+  background: var(--eurth-off) !important;
+}
+
+/* ---------- tooltips, modals, alerts, inputs ---------- */
+
+[data-mantine-color-scheme] .mantine-Tooltip-tooltip {
+  background: var(--eurth-deep);
+  color: var(--eurth-ink);
+  border: 1px solid var(--eurth-rule);
+  border-radius: 2px;
+  font-family: var(--eurth-mono);
+  font-size: 12px;
+}
+
+[data-mantine-color-scheme] .mantine-Modal-content,
+[data-mantine-color-scheme] .mantine-Modal-header {
+  background: var(--eurth-panel);
+}
+
+[data-mantine-color-scheme] .mantine-Modal-content {
+  border: 1px solid var(--eurth-rule);
+}
+
+[data-mantine-color-scheme] .mantine-Modal-title {
+  font-family: var(--eurth-display);
+  font-weight: 700;
+  font-size: 20px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+[data-mantine-color-scheme] .mantine-Modal-body {
+  font-family: var(--eurth-mono);
+  font-size: 12.5px;
+  color: var(--eurth-ink);
+}
+
+[data-mantine-color-scheme] .mantine-Alert-root {
+  border: 1px solid var(--eurth-rule);
+  border-left: 3px solid var(--eurth-amber);
+  border-radius: 2px;
+  background: var(--eurth-panel);
+}
+
+[data-mantine-color-scheme] .mantine-Alert-title span {
+  font-family: var(--eurth-display);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+[data-mantine-color-scheme] .mantine-Button-root[data-variant='default'] {
+  font-family: var(--eurth-display);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: var(--eurth-panel);
+  border-color: var(--eurth-rule);
+}
+
+[data-mantine-color-scheme] .mantine-Input-input {
+  font-family: var(--eurth-mono);
+  background: var(--eurth-deep);
+  border-color: var(--eurth-rule);
+}
+
+/* ---------- footer ---------- */
+
+[data-mantine-color-scheme] main .mantine-Divider-root {
+  border-color: var(--eurth-rule);
+}
+
+.eurth-footer {
+  margin: 14px 16px 0;
+  text-align: center;
+  font-family: var(--eurth-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--eurth-dim);
+}
+
+.eurth-footer a {
+  color: var(--eurth-scope);
+}
