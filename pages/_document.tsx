@@ -5,6 +5,7 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head>
+        {/* Eurth fork change: single dark console look */}
         <ColorSchemeScript forceColorScheme="dark" />
         <meta name="theme-color" content="#0a161d" />
       </Head>

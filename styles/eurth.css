@@ -57,28 +57,68 @@ main > header[class] > .mantine-Container-root {
   height: 64px;
 }
 
-/* "STATUS" tag beside the logo, like the artifact's "Mission Control" title */
+main > header[class] > .mantine-Container-root {
+  max-width: var(--eurth-width);
+}
+
+/* Wordmark instead of the UptimeFlare logo (credited in the footer), like the artifact's
+   "Mission Control" title: tower icon, EURTH in ink, STATUS in amber */
 main > header[class] > .mantine-Container-root > div:first-child {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
-main > header[class] > .mantine-Container-root > div:first-child::after {
-  content: 'Status';
+main > header[class] > .mantine-Container-root > div:first-child::before {
+  content: '';
+  width: 22px;
+  height: 22px;
+  background: var(--eurth-amber);
+  -webkit-mask: center / contain no-repeat;
+  mask: center / contain no-repeat;
+}
+
+main > header[class] > .mantine-Container-root > div:first-child img {
+  display: none;
+}
+
+main > header[class] > .mantine-Container-root > div:first-child > a {
+  display: flex;
+  gap: 0.3em;
   font-family: var(--eurth-display);
   font-weight: 700;
-  font-size: 24px;
+  font-size: 30px;
   line-height: 1;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
+  text-decoration: none;
+  color: var(--eurth-ink);
+}
+
+main > header[class] > .mantine-Container-root > div:first-child > a::before {
+  content: 'Eurth';
+}
+
+main > header[class] > .mantine-Container-root > div:first-child > a::after {
+  content: 'Status';
   color: var(--eurth-amber);
 }
 
-@media (max-width: 48em) {
-  main > header[class] > .mantine-Container-root > div:first-child::after {
-    display: none;
-  }
+/* nav icons (Font Awesome Free, CC BY 4.0), drawn as masks so they take the link colour */
+[data-mantine-color-scheme] main > header .mantine-Group-root a[class] {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+[data-mantine-color-scheme] main > header .mantine-Group-root a[class]::before {
+  content: '';
+  width: 14px;
+  height: 14px;
+  flex: none;
+  background: currentColor;
+  -webkit-mask: center / contain no-repeat;
+  mask: center / contain no-repeat;
 }
 
 [data-mantine-color-scheme] main > header a[class] {
@@ -315,8 +355,16 @@ main [style*='background: gray'] {
 /* ---------- phones ---------- */
 
 @media (max-width: 48em) {
-  main > header[class] img {
-    width: 104px !important;
+  main > header[class] > .mantine-Container-root > div:first-child > a {
+    font-size: 21px;
+  }
+
+  main > header[class] > .mantine-Container-root > div:first-child::before {
+    display: none;
+  }
+
+  [data-mantine-color-scheme] main > header .mantine-Group-root a[class]::before {
+    display: none;
   }
 
   [data-mantine-color-scheme] main > header a[class] {
@@ -369,4 +417,746 @@ main [style*='background: gray'] {
 
 .eurth-footer a {
   color: var(--eurth-scope);
+}
+
+/* ---------- page width: console, header and fleet list line up ---------- */
+
+:root {
+  --eurth-width: 1120px;
+}
+
+[data-mantine-color-scheme] main .mantine-Card-root {
+  width: min(var(--eurth-width), calc(100% - 32px)) !important;
+}
+
+/* the 90 day bars stretch to fill the wider list */
+[data-mantine-color-scheme] .mantine-Card-section [style*='flex-wrap: nowrap'] > div {
+  flex: 1 1 0;
+  width: auto !important;
+  min-width: 3px;
+}
+
+/* ---------- tower console ---------- */
+
+.eurth-console {
+  width: min(var(--eurth-width), calc(100% - 32px));
+  margin: 0 auto 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.eurth-icon {
+  width: 1em;
+  height: 1em;
+  flex: none;
+  vertical-align: -0.125em;
+}
+
+.eurth-strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 22px;
+  padding-top: 14px;
+  font-family: var(--eurth-mono);
+  font-size: 12px;
+  color: var(--eurth-dim);
+  letter-spacing: 0.06em;
+}
+
+.eurth-strip-id {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.eurth-strip-id .eurth-icon {
+  color: var(--eurth-amber);
+  font-size: 15px;
+}
+
+.eurth-strip b {
+  color: var(--eurth-amber);
+  font-weight: 600;
+}
+
+.eurth-clocks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+}
+
+.eurth-clocks em {
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+}
+
+.eurth-clocks b {
+  margin-left: 6px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--eurth-scope);
+  font-variant-numeric: tabular-nums;
+}
+
+.eurth-clocks b.ink {
+  color: var(--eurth-ink);
+  font-size: 13px;
+}
+
+.eurth-clocks b.alert {
+  color: var(--eurth-bad);
+  animation: eurth-blink 1s steps(2) infinite;
+}
+
+.eurth-atis {
+  overflow: hidden;
+  white-space: nowrap;
+  border: 1px solid var(--eurth-rule);
+  border-radius: 2px;
+  background: var(--eurth-deep);
+  padding: 6px 0;
+  font-family: var(--eurth-mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--eurth-amber);
+}
+
+.eurth-atis span {
+  display: inline-block;
+  animation: eurth-ticker 90s linear infinite;
+}
+
+@keyframes eurth-ticker {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.eurth-bezel {
+  background: var(--eurth-panel);
+  border: 1px solid var(--eurth-rule);
+  border-radius: 3px;
+  min-width: 0;
+}
+
+.eurth-bezel-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--eurth-rule);
+}
+
+.eurth-bezel-head h2 {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--eurth-display);
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--eurth-dim);
+}
+
+.eurth-bezel-head h2 .eurth-icon {
+  color: var(--eurth-amber);
+}
+
+.eurth-bezel-head .meta {
+  font-family: var(--eurth-mono);
+  font-size: 11px;
+  color: var(--eurth-dim);
+}
+
+.eurth-deck {
+  display: grid;
+  grid-template-columns: minmax(0, 400px) minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
+}
+
+.eurth-scope {
+  display: flex;
+  flex-direction: column;
+}
+
+.eurth-scope-wrap {
+  width: 100%;
+  max-width: 376px;
+  aspect-ratio: 1 / 1;
+  margin: 12px auto 6px;
+}
+
+.eurth-radar {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border-radius: 50%;
+  cursor: crosshair;
+  touch-action: manipulation;
+}
+
+.eurth-caption {
+  margin: 0 12px 8px;
+  text-align: center;
+  font-family: var(--eurth-mono);
+  font-size: 10.5px;
+  color: var(--eurth-dim);
+  letter-spacing: 0.03em;
+}
+
+.eurth-datablock {
+  margin: 0 12px 12px;
+  min-height: 62px;
+  padding: 7px 9px;
+  border: 1px solid var(--eurth-rule);
+  border-radius: 2px;
+  background: var(--eurth-deep);
+  font-family: var(--eurth-mono);
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--eurth-dim);
+}
+
+.eurth-datablock b {
+  color: var(--eurth-amber);
+  font-weight: 600;
+}
+
+.eurth-datablock .l2 {
+  color: var(--eurth-ink);
+}
+
+.eurth-right {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+}
+
+/* the upstream overall status, compacted into the tower report bezel */
+.eurth-tower > .mantine-Container-root {
+  margin-top: 0;
+  padding: 14px 16px 16px;
+  max-width: none;
+}
+
+.eurth-tower .mantine-Center-root > .tabler-icon {
+  width: 46px !important;
+  height: 46px !important;
+}
+
+[data-mantine-color-scheme] .eurth-tower h1.mantine-Title-root {
+  font-size: clamp(26px, 3.4vw, 38px);
+  margin-top: 6px;
+}
+
+/* split-flap cards for the mainline fleet */
+.eurth-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.eurth-card {
+  all: unset;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  padding: 10px 12px 11px;
+  border: 1px solid var(--eurth-rule);
+  border-left: 4px solid var(--eurth-ok);
+  border-radius: 3px;
+  background: var(--eurth-panel);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.eurth-card:hover {
+  background: var(--eurth-raised);
+}
+
+.eurth-card:focus-visible {
+  outline: 2px solid var(--eurth-amber);
+  outline-offset: 2px;
+}
+
+.eurth-card.selected {
+  border-color: var(--eurth-amber);
+  border-left-color: var(--eurth-amber);
+}
+
+.eurth-card[data-status='delayed'],
+.eurth-card[data-status='maint'] {
+  border-left-color: var(--eurth-amber);
+}
+
+.eurth-card[data-status='cancelled'] {
+  border-left-color: var(--eurth-bad);
+}
+
+.eurth-card[data-status='sched'] {
+  border-left-color: var(--eurth-off);
+  border-left-style: dashed;
+}
+
+.eurth-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--eurth-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+}
+
+.eurth-card-head .cs {
+  color: var(--eurth-amber);
+  font-weight: 600;
+}
+
+.eurth-card-head .st {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  text-transform: uppercase;
+  color: var(--eurth-ok);
+}
+
+.eurth-card[data-status='delayed'] .st,
+.eurth-card[data-status='maint'] .st {
+  color: var(--eurth-amber);
+}
+
+.eurth-card[data-status='cancelled'] .st {
+  color: var(--eurth-bad);
+  animation: eurth-blink 1.2s steps(2) infinite;
+}
+
+.eurth-card[data-status='sched'] .st {
+  color: var(--eurth-dim);
+}
+
+.eurth-card-name {
+  font-family: var(--eurth-display);
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 1;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--eurth-ink);
+}
+
+.eurth-card-sub {
+  font-family: var(--eurth-mono);
+  font-size: 10.5px;
+  color: var(--eurth-dim);
+}
+
+/* split-flap cells, after the artifact's readouts */
+.eurth-flaps {
+  display: flex;
+  gap: 3px;
+}
+
+.eurth-flaps.big {
+  font-family: var(--eurth-display);
+  font-weight: 600;
+  font-size: 36px;
+  color: var(--eurth-ink);
+}
+
+.eurth-flaps.label {
+  gap: 0;
+  font-family: var(--eurth-display);
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  color: var(--eurth-dim);
+}
+
+.eurth-flap {
+  position: relative;
+  display: inline-block;
+  width: 0.7em;
+  height: 1.12em;
+  line-height: 1;
+  flex: none;
+  perspective: 300px;
+  border-radius: 2px;
+  background: #060f14;
+  box-shadow: inset 0 0 0 1px #050b0f;
+}
+
+.eurth-flaps.label .eurth-flap {
+  width: 0.78em;
+  height: 1.25em;
+  background: transparent;
+  box-shadow: none;
+}
+
+.eurth-flap > span {
+  position: absolute;
+  left: 0;
+  right: 0;
+  overflow: hidden;
+  backface-visibility: hidden;
+}
+
+.eurth-flap > span > i {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1.12em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-style: normal;
+}
+
+.eurth-flaps.label .eurth-flap > span > i {
+  height: 1.25em;
+}
+
+.eurth-flap .t,
+.eurth-flap .ft {
+  top: 0;
+  height: 50%;
+  border-radius: 2px 2px 0 0;
+  background: linear-gradient(#0d1b22, #09151b);
+}
+
+.eurth-flap .b,
+.eurth-flap .fb {
+  top: 50%;
+  height: 50%;
+  border-radius: 0 0 2px 2px;
+  background: linear-gradient(#08131a, #060f14);
+}
+
+.eurth-flaps.label .eurth-flap > span {
+  background: transparent;
+}
+
+.eurth-flap .t > i,
+.eurth-flap .ft > i {
+  top: 0;
+}
+
+.eurth-flap .b > i,
+.eurth-flap .fb > i {
+  bottom: 0;
+}
+
+.eurth-flap::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  margin-top: -0.5px;
+  background: rgba(0, 0, 0, 0.75);
+  z-index: 3;
+}
+
+.eurth-flaps.label .eurth-flap::after {
+  display: none;
+}
+
+.eurth-flap .ft {
+  transform-origin: 50% 100%;
+  z-index: 2;
+  transform: rotateX(-90deg);
+}
+
+.eurth-flap .fb {
+  transform-origin: 50% 0;
+  z-index: 2;
+  transform: rotateX(0);
+}
+
+.eurth-flap[data-go] .ft {
+  animation: eurth-ftop var(--fd, 70ms) cubic-bezier(0.55, 0, 0.9, 0.45) both;
+}
+
+.eurth-flap[data-go] .fb {
+  animation: eurth-fbot calc(var(--fd, 70ms) * 1.2) cubic-bezier(0.2, 0.85, 0.3, 1.3) var(--fd, 70ms) both;
+}
+
+@keyframes eurth-ftop {
+  from {
+    transform: rotateX(0);
+    filter: brightness(1);
+  }
+  to {
+    transform: rotateX(-90deg);
+    filter: brightness(0.45);
+  }
+}
+
+@keyframes eurth-fbot {
+  from {
+    transform: rotateX(90deg);
+    filter: brightness(0.55);
+  }
+  to {
+    transform: rotateX(0);
+    filter: brightness(1);
+  }
+}
+
+/* departures board */
+.eurth-fids {
+  font-family: var(--eurth-mono);
+  font-size: 12.5px;
+}
+
+.eurth-fids .row {
+  display: grid;
+  grid-template-columns: 58px minmax(0, 1fr) 60px 76px 112px;
+  gap: 4px 12px;
+  align-items: center;
+  padding: 7px 12px;
+  border-bottom: 1px solid var(--eurth-rule);
+  cursor: pointer;
+}
+
+.eurth-fids .row:last-child {
+  border-bottom: 0;
+}
+
+.eurth-fids .row:not(.head):hover,
+.eurth-fids .row.selected {
+  background: var(--eurth-raised);
+}
+
+.eurth-fids .row.head {
+  cursor: default;
+  padding-block: 5px;
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--eurth-dim);
+}
+
+.eurth-fids .std {
+  color: var(--eurth-scope);
+  font-size: 14px;
+}
+
+.eurth-fids .fl {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--eurth-ink);
+}
+
+.eurth-fids .fl b {
+  color: var(--eurth-amber);
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+.eurth-fids .fl a {
+  color: var(--eurth-ink);
+  text-decoration: none;
+}
+
+.eurth-fids .fl a:hover {
+  color: var(--eurth-scope);
+  text-decoration: underline;
+}
+
+.eurth-fids .fl em {
+  margin-left: 10px;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--eurth-dim);
+}
+
+.eurth-fids .gate,
+.eurth-fids .ping {
+  color: var(--eurth-dim);
+  font-variant-numeric: tabular-nums;
+}
+
+.eurth-fids .st {
+  font-weight: 600;
+  font-size: 11.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.eurth-fids .st.ontime {
+  color: var(--eurth-ok);
+}
+
+.eurth-fids .st.delayed,
+.eurth-fids .st.maint {
+  color: var(--eurth-amber);
+  animation: eurth-blink 1.2s steps(2) infinite;
+}
+
+.eurth-fids .st.cancelled {
+  color: var(--eurth-bad);
+  animation: eurth-blink 1s steps(2) infinite;
+}
+
+.eurth-fids .st.sched {
+  color: var(--eurth-dim);
+}
+
+@keyframes eurth-blink {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+@media (max-width: 900px) {
+  .eurth-deck {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .eurth-fids .row {
+    grid-template-columns: 46px minmax(0, 1fr) 92px;
+  }
+
+  .eurth-fids .gate,
+  .eurth-fids .ping,
+  .eurth-fids .fl em {
+    display: none;
+  }
+
+  .eurth-flaps.big {
+    font-size: 27px;
+  }
+
+  .eurth-card-name {
+    font-size: 16px;
+  }
+}
+
+/* ---------- group headings ---------- */
+
+[data-mantine-color-scheme] .mantine-Accordion-label > div > div:first-child {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+[data-mantine-color-scheme] .mantine-Accordion-label > div > div:first-child::before {
+  content: '';
+  width: 18px;
+  height: 18px;
+  background: var(--eurth-amber);
+  -webkit-mask: center / contain no-repeat;
+  mask: center / contain no-repeat;
+}
+
+[data-mantine-color-scheme] .mantine-Accordion-item + .mantine-Accordion-item .mantine-Accordion-label > div > div:first-child::before {
+  background: var(--eurth-dim);
+}
+
+/* ---------- live effects ---------- */
+
+/* bad days glow on the 90 day strip; amber days a little */
+main [style*='background: rgb(223, 72, 74)'] {
+  box-shadow: 0 0 6px 1px rgba(255, 91, 71, 0.75);
+  animation: eurth-glow 2.4s ease-in-out infinite;
+}
+
+main [style*='background: rgb(242, 144, 48)'] {
+  box-shadow: 0 0 5px rgba(242, 179, 61, 0.45);
+}
+
+@keyframes eurth-glow {
+  50% {
+    box-shadow: 0 0 11px 3px rgba(255, 91, 71, 0.95);
+    filter: brightness(1.25);
+  }
+}
+
+/* data packets streaming along the latency traces (components/eurth/chartFx.ts) */
+.eurth-packets {
+  position: absolute;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+}
+
+/* squawk 7700: something in the mainline fleet is down (or someone typed it) */
+body.eurth-mayday {
+  --eurth-amber: #ff5b47;
+  --eurth-scope: #ff7a66;
+}
+
+body.eurth-mayday main > header[class] {
+  border-bottom-color: var(--eurth-bad);
+  animation: eurth-blink 0.9s steps(2) infinite;
+}
+
+body.eurth-nordo .eurth-atis,
+body.eurth-nordo .eurth-clocks b {
+  color: var(--eurth-off);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .eurth-atis {
+    white-space: normal;
+    padding-inline: 10px;
+  }
+}
+
+/* ---------- icon masks (Font Awesome Free 6.5.2, CC BY 4.0, https://fontawesome.com/license/free) ---------- */
+
+[data-mantine-color-scheme] main > header .mantine-Group-root a[href='/incidents']::before {
+  -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 384 512'><path d='M192 0c-41.8 0-77.4 26.7-90.5 64H64C28.7 64 0 92.7 0 128V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H282.5C269.4 26.7 233.8 0 192 0zm0 64a32 32 0 1 1 0 64 32 32 0 1 1 0-64zM72 272a24 24 0 1 1 48 0 24 24 0 1 1 -48 0zm104-16H304c8.8 0 16 7.2 16 16s-7.2 16-16 16H176c-8.8 0-16-7.2-16-16s7.2-16 16-16zM72 368a24 24 0 1 1 48 0 24 24 0 1 1 -48 0zm88 0c0-8.8 7.2-16 16-16H304c8.8 0 16 7.2 16 16s-7.2 16-16 16H176c-8.8 0-16-7.2-16-16z'/></svg>");
+  mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 384 512'><path d='M192 0c-41.8 0-77.4 26.7-90.5 64H64C28.7 64 0 92.7 0 128V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H282.5C269.4 26.7 233.8 0 192 0zm0 64a32 32 0 1 1 0 64 32 32 0 1 1 0-64zM72 272a24 24 0 1 1 48 0 24 24 0 1 1 -48 0zm104-16H304c8.8 0 16 7.2 16 16s-7.2 16-16 16H176c-8.8 0-16-7.2-16-16s7.2-16 16-16zM72 368a24 24 0 1 1 48 0 24 24 0 1 1 -48 0zm88 0c0-8.8 7.2-16 16-16H304c8.8 0 16 7.2 16 16s-7.2 16-16 16H176c-8.8 0-16-7.2-16-16z'/></svg>");
+}
+
+[data-mantine-color-scheme] main > header .mantine-Group-root a[href^='https://github.com/eurth-org/eurth-status?']::before {
+  -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 512'><path d='M0 488V171.3c0-26.2 15.9-49.7 40.2-59.4L308.1 4.8c7.6-3.1 16.1-3.1 23.8 0L599.8 111.9c24.3 9.7 40.2 33.3 40.2 59.4V488c0 13.3-10.7 24-24 24H568c-13.3 0-24-10.7-24-24V224c0-17.7-14.3-32-32-32H128c-17.7 0-32 14.3-32 32V488c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24zm488 24l-336 0c-13.3 0-24-10.7-24-24V432H512l0 56c0 13.3-10.7 24-24 24zM128 400V336H512v64H128zm0-96V224H512l0 80H128z'/></svg>");
+  mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 512'><path d='M0 488V171.3c0-26.2 15.9-49.7 40.2-59.4L308.1 4.8c7.6-3.1 16.1-3.1 23.8 0L599.8 111.9c24.3 9.7 40.2 33.3 40.2 59.4V488c0 13.3-10.7 24-24 24H568c-13.3 0-24-10.7-24-24V224c0-17.7-14.3-32-32-32H128c-17.7 0-32 14.3-32 32V488c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24zm488 24l-336 0c-13.3 0-24-10.7-24-24V432H512l0 56c0 13.3-10.7 24-24 24zM128 400V336H512v64H128zm0-96V224H512l0 80H128z'/></svg>");
+}
+
+[data-mantine-color-scheme] main > header .mantine-Group-root a[href^='https://eurth.org/?']::before {
+  -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 512'><path d='M72 88a56 56 0 1 1 112 0A56 56 0 1 1 72 88zM64 245.7C54 256.9 48 271.8 48 288s6 31.1 16 42.3V245.7zm144.4-49.3C178.7 222.7 160 261.2 160 304c0 34.3 12 65.8 32 90.5V416c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V389.2C26.2 371.2 0 332.7 0 288c0-61.9 50.1-112 112-112h32c24 0 46.2 7.5 64.4 20.3zM448 416V394.5c20-24.7 32-56.2 32-90.5c0-42.8-18.7-81.3-48.4-107.7C449.8 183.5 472 176 496 176h32c61.9 0 112 50.1 112 112c0 44.7-26.2 83.2-64 101.2V416c0 17.7-14.3 32-32 32H480c-17.7 0-32-14.3-32-32zm8-328a56 56 0 1 1 112 0A56 56 0 1 1 456 88zM576 245.7v84.7c10-11.3 16-26.1 16-42.3s-6-31.1-16-42.3zM320 32a64 64 0 1 1 0 128 64 64 0 1 1 0-128zM240 304c0 16.2 6 31 16 42.3V261.7c-10 11.3-16 26.1-16 42.3zm144-42.3v84.7c10-11.3 16-26.1 16-42.3s-6-31.1-16-42.3zM448 304c0 44.7-26.2 83.2-64 101.2V448c0 17.7-14.3 32-32 32H288c-17.7 0-32-14.3-32-32V405.2c-37.8-18-64-56.5-64-101.2c0-61.9 50.1-112 112-112h32c61.9 0 112 50.1 112 112z'/></svg>");
+  mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 512'><path d='M72 88a56 56 0 1 1 112 0A56 56 0 1 1 72 88zM64 245.7C54 256.9 48 271.8 48 288s6 31.1 16 42.3V245.7zm144.4-49.3C178.7 222.7 160 261.2 160 304c0 34.3 12 65.8 32 90.5V416c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V389.2C26.2 371.2 0 332.7 0 288c0-61.9 50.1-112 112-112h32c24 0 46.2 7.5 64.4 20.3zM448 416V394.5c20-24.7 32-56.2 32-90.5c0-42.8-18.7-81.3-48.4-107.7C449.8 183.5 472 176 496 176h32c61.9 0 112 50.1 112 112c0 44.7-26.2 83.2-64 101.2V416c0 17.7-14.3 32-32 32H480c-17.7 0-32-14.3-32-32zm8-328a56 56 0 1 1 112 0A56 56 0 1 1 456 88zM576 245.7v84.7c10-11.3 16-26.1 16-42.3s-6-31.1-16-42.3zM320 32a64 64 0 1 1 0 128 64 64 0 1 1 0-128zM240 304c0 16.2 6 31 16 42.3V261.7c-10 11.3-16 26.1-16 42.3zm144-42.3v84.7c10-11.3 16-26.1 16-42.3s-6-31.1-16-42.3zM448 304c0 44.7-26.2 83.2-64 101.2V448c0 17.7-14.3 32-32 32H288c-17.7 0-32-14.3-32-32V405.2c-37.8-18-64-56.5-64-101.2c0-61.9 50.1-112 112-112h32c61.9 0 112 50.1 112 112z'/></svg>");
+}
+
+[data-mantine-color-scheme] main > header .mantine-Group-root a[href*='/issues/new']::before {
+  -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><path d='M256 48C141.1 48 48 141.1 48 256v40c0 13.3-10.7 24-24 24s-24-10.7-24-24V256C0 114.6 114.6 0 256 0S512 114.6 512 256V400.1c0 48.6-39.4 88-88.1 88L313.6 488c-8.3 14.3-23.8 24-41.6 24H240c-26.5 0-48-21.5-48-48s21.5-48 48-48h32c17.8 0 33.3 9.7 41.6 24l110.4 .1c22.1 0 40-17.9 40-40V256c0-114.9-93.1-208-208-208zM144 208h16c17.7 0 32 14.3 32 32V352c0 17.7-14.3 32-32 32H144c-35.3 0-64-28.7-64-64V272c0-35.3 28.7-64 64-64zm224 0c35.3 0 64 28.7 64 64v48c0 35.3-28.7 64-64 64H352c-17.7 0-32-14.3-32-32V240c0-17.7 14.3-32 32-32h16z'/></svg>");
+  mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><path d='M256 48C141.1 48 48 141.1 48 256v40c0 13.3-10.7 24-24 24s-24-10.7-24-24V256C0 114.6 114.6 0 256 0S512 114.6 512 256V400.1c0 48.6-39.4 88-88.1 88L313.6 488c-8.3 14.3-23.8 24-41.6 24H240c-26.5 0-48-21.5-48-48s21.5-48 48-48h32c17.8 0 33.3 9.7 41.6 24l110.4 .1c22.1 0 40-17.9 40-40V256c0-114.9-93.1-208-208-208zM144 208h16c17.7 0 32 14.3 32 32V352c0 17.7-14.3 32-32 32H144c-35.3 0-64-28.7-64-64V272c0-35.3 28.7-64 64-64zm224 0c35.3 0 64 28.7 64 64v48c0 35.3-28.7 64-64 64H352c-17.7 0-32-14.3-32-32V240c0-17.7 14.3-32 32-32h16z'/></svg>");
+}
+
+main > header[class] > .mantine-Container-root > div:first-child::before {
+  -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><path d='M241.7 3.4c9-4.5 19.6-4.5 28.6 0l160 80c15.8 7.9 22.2 27.1 14.3 42.9C439 137.5 427.7 144 416 144v80c0 17.7-14.3 32-32 32h-4.9l32 192H480c17.7 0 32 14.3 32 32s-14.3 32-32 32H384.5c-.4 0-.8 0-1.1 0H128.6c-.4 0-.8 0-1.1 0H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l32-192H128c-17.7 0-32-14.3-32-32V144c-11.7 0-23-6.5-28.6-17.7c-7.9-15.8-1.5-35 14.3-42.9l160-80zM314.5 448L256 399.2 197.5 448h117zM197.8 256l-4.7 28.3L256 336.8l62.9-52.5L314.2 256H197.8zm-13.9 83.2l-11.2 67L218.5 368l-34.6-28.8zM293.5 368l45.8 38.1-11.2-67L293.5 368zM176 128c-8.8 0-16 7.2-16 16s7.2 16 16 16H336c8.8 0 16-7.2 16-16s-7.2-16-16-16H176z'/></svg>");
+  mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><path d='M241.7 3.4c9-4.5 19.6-4.5 28.6 0l160 80c15.8 7.9 22.2 27.1 14.3 42.9C439 137.5 427.7 144 416 144v80c0 17.7-14.3 32-32 32h-4.9l32 192H480c17.7 0 32 14.3 32 32s-14.3 32-32 32H384.5c-.4 0-.8 0-1.1 0H128.6c-.4 0-.8 0-1.1 0H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l32-192H128c-17.7 0-32-14.3-32-32V144c-11.7 0-23-6.5-28.6-17.7c-7.9-15.8-1.5-35 14.3-42.9l160-80zM314.5 448L256 399.2 197.5 448h117zM197.8 256l-4.7 28.3L256 336.8l62.9-52.5L314.2 256H197.8zm-13.9 83.2l-11.2 67L218.5 368l-34.6-28.8zM293.5 368l45.8 38.1-11.2-67L293.5 368zM176 128c-8.8 0-16 7.2-16 16s7.2 16 16 16H336c8.8 0 16-7.2 16-16s-7.2-16-16-16H176z'/></svg>");
+}
+
+[data-mantine-color-scheme] .mantine-Accordion-label > div > div:first-child::before {
+  -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 576 512'><path d='M482.3 192c34.2 0 93.7 29 93.7 64c0 36-59.5 64-93.7 64l-116.6 0L265.2 495.9c-5.7 10-16.3 16.1-27.8 16.1l-56.2 0c-10.6 0-18.3-10.2-15.4-20.4l49-171.6L112 320 68.8 377.6c-3 4-7.8 6.4-12.8 6.4l-42 0c-7.8 0-14-6.3-14-14c0-1.3 .2-2.6 .5-3.9L32 256 .5 145.9c-.4-1.3-.5-2.6-.5-3.9c0-7.8 6.3-14 14-14l42 0c5 0 9.8 2.4 12.8 6.4L112 192l102.9 0-49-171.6C162.9 10.2 170.6 0 181.2 0l56.2 0c11.5 0 22.1 6.2 27.8 16.1L365.7 192l116.6 0z'/></svg>");
+  mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 576 512'><path d='M482.3 192c34.2 0 93.7 29 93.7 64c0 36-59.5 64-93.7 64l-116.6 0L265.2 495.9c-5.7 10-16.3 16.1-27.8 16.1l-56.2 0c-10.6 0-18.3-10.2-15.4-20.4l49-171.6L112 320 68.8 377.6c-3 4-7.8 6.4-12.8 6.4l-42 0c-7.8 0-14-6.3-14-14c0-1.3 .2-2.6 .5-3.9L32 256 .5 145.9c-.4-1.3-.5-2.6-.5-3.9c0-7.8 6.3-14 14-14l42 0c5 0 9.8 2.4 12.8 6.4L112 192l102.9 0-49-171.6C162.9 10.2 170.6 0 181.2 0l56.2 0c11.5 0 22.1 6.2 27.8 16.1L365.7 192l116.6 0z'/></svg>");
 }

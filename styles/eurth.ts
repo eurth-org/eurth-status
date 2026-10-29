@@ -2,7 +2,8 @@
 // so UptimeFlare updates merge without conflicts; styles/eurth.css holds the rest.
 import { createTheme, MantineColorsTuple } from '@mantine/core'
 import { Barlow_Condensed, IBM_Plex_Mono, IBM_Plex_Sans } from 'next/font/google'
-import { Chart } from 'chart.js'
+import { setupCharts } from '@/components/eurth/chartFx'
+import '@/components/eurth/wording'
 
 // Self-hosted at build time, so visitors never hit Google's servers
 const display = Barlow_Condensed({ subsets: ['latin', 'latin-ext'], weight: ['500', '600', '700'] })
@@ -49,24 +50,4 @@ export const eurthTheme = createTheme({
   defaultRadius: 'xs',
 })
 
-// Latency charts: phosphor-cyan trace on the console grid
-Chart.defaults.color = '#7f9ba6'
-Chart.defaults.borderColor = '#1e3a47'
-Chart.defaults.font.family = mono.style.fontFamily
-// set() creates the path, which only exists once DetailChart registers the Tooltip plugin
-Chart.defaults.set('plugins.tooltip', {
-  backgroundColor: '#07121a',
-  borderColor: '#1e3a47',
-  borderWidth: 1,
-  titleColor: '#f2b33d',
-  bodyColor: '#d6e5ea',
-  cornerRadius: 2,
-})
-Chart.register({
-  id: 'eurthTrace',
-  beforeUpdate(chart) {
-    chart.data.datasets.forEach((dataset) => {
-      dataset.borderColor = '#5fd4e6'
-    })
-  },
-})
+setupCharts(mono.style.fontFamily)

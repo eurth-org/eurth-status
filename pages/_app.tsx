@@ -1,4 +1,5 @@
 import '@mantine/core/styles.css'
+// Eurth fork change: theme, fonts and aviation wording (styles/eurth.*, components/eurth/)
 import '@/styles/eurth.css'
 import type { AppProps } from 'next/app'
 import { MantineProvider } from '@mantine/core'
