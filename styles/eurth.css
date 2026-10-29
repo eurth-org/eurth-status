@@ -312,6 +312,46 @@ main [style*='background: gray'] {
   border-color: var(--eurth-rule);
 }
 
+/* ---------- phones ---------- */
+
+@media (max-width: 48em) {
+  main > header[class] img {
+    width: 104px !important;
+  }
+
+  [data-mantine-color-scheme] main > header a[class] {
+    font-size: 14px;
+    letter-spacing: 0.04em;
+    padding: 6px 8px;
+  }
+
+  [data-mantine-color-scheme] main .mantine-Card-root {
+    padding: 0;
+  }
+
+  [data-mantine-color-scheme] .mantine-Accordion-control {
+    padding-inline: 12px 8px;
+  }
+
+  [data-mantine-color-scheme] .mantine-Accordion-label {
+    font-size: 18px;
+  }
+
+  [data-mantine-color-scheme] .mantine-Accordion-label .mantine-Text-root {
+    font-size: 11px;
+    letter-spacing: 0.02em;
+  }
+
+  [data-mantine-color-scheme] .mantine-Accordion-content {
+    padding-inline: 4px;
+  }
+
+  [data-mantine-color-scheme] .mantine-Card-section .mantine-Text-root {
+    font-size: 12px;
+    white-space: nowrap;
+  }
+}
+
 /* ---------- footer ---------- */
 
 [data-mantine-color-scheme] main .mantine-Divider-root {

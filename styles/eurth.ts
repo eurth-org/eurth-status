@@ -53,12 +53,15 @@ export const eurthTheme = createTheme({
 Chart.defaults.color = '#7f9ba6'
 Chart.defaults.borderColor = '#1e3a47'
 Chart.defaults.font.family = mono.style.fontFamily
-Chart.defaults.plugins.tooltip.backgroundColor = '#07121a'
-Chart.defaults.plugins.tooltip.borderColor = '#1e3a47'
-Chart.defaults.plugins.tooltip.borderWidth = 1
-Chart.defaults.plugins.tooltip.titleColor = '#f2b33d'
-Chart.defaults.plugins.tooltip.bodyColor = '#d6e5ea'
-Chart.defaults.plugins.tooltip.cornerRadius = 2
+// set() creates the path, which only exists once DetailChart registers the Tooltip plugin
+Chart.defaults.set('plugins.tooltip', {
+  backgroundColor: '#07121a',
+  borderColor: '#1e3a47',
+  borderWidth: 1,
+  titleColor: '#f2b33d',
+  bodyColor: '#d6e5ea',
+  cornerRadius: 2,
+})
 Chart.register({
   id: 'eurthTrace',
   beforeUpdate(chart) {
