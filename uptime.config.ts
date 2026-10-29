@@ -24,7 +24,7 @@ const pageConfig: PageConfig = {
   ],
   // Monitors are shown per group, in this order; a monitor left out of every group is hidden
   group: {
-    'Core platforms': ['eurth_homepage', 'eurth_map', 'eurth_news'],
+    'Core platforms': ['eurth_homepage', 'eurth_map', 'eurth_news', 'eurth_gov'],
     'Legacy platform': ['europans_homepage'],
   },
   customFooter: `<p class="eurth-footer">Monitoring for the <a href="${ref('https://eurth.org/')}" target="_blank">Eurth</a> community · powered by <a href="${ref('https://github.com/lyc8503/UptimeFlare')}" target="_blank">UptimeFlare</a>, made with ❤ by <a href="${ref('https://github.com/lyc8503')}" target="_blank">lyc8503</a>.</p>`,
@@ -91,7 +91,26 @@ const workerConfig: WorkerConfig = {
     }, // <-- Closes the second monitor object
 
     // -------------------------------------
-    // Monitor 4: europans_homepage
+    // Monitor 4: eurth_gov
+    // -------------------------------------
+    {
+      id: 'eurth_gov',
+      name: 'gov.eurth.org',
+      method: 'GET',
+      target: 'https://gov.eurth.org',
+      checkProxy: 'worker://weur',
+      tooltip: 'Government subdomain monitor',
+      statusPageLink: ref('https://gov.eurth.org'),
+      expectedCodes: [200],
+      timeout: 10000,
+      headers: {
+        'User-Agent': 'Uptimeflare',
+        Authorization: 'Bearer YOUR_TOKEN_HERE',
+      }, // <-- Closes the headers object
+    }, // <-- Closes the fourth monitor object
+
+    // -------------------------------------
+    // Monitor 5: europans_homepage
     // -------------------------------------
     {
       id: 'europans_homepage',
