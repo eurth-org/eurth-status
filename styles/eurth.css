@@ -48,7 +48,7 @@ main[class] {
 
 main > header[class] {
   height: auto;
-  margin-bottom: 56px;
+  margin-bottom: 0;
   background: var(--eurth-panel);
   border-bottom: 2px solid var(--eurth-amber);
 }
@@ -677,13 +677,14 @@ main [style*='background: gray'] {
   border: 1px solid var(--eurth-rule);
   border-left: 4px solid var(--eurth-ok);
   border-radius: 3px;
-  background: var(--eurth-panel);
+  --card-bg: var(--eurth-panel);
+  background: var(--card-bg);
   cursor: pointer;
-  transition: background 0.15s, border-color 0.15s;
+  transition: border-color 0.15s;
 }
 
 .eurth-card:hover {
-  background: var(--eurth-raised);
+  --card-bg: var(--eurth-raised);
 }
 
 .eurth-card:focus-visible {
@@ -845,7 +846,7 @@ main [style*='background: gray'] {
 }
 
 .eurth-flaps.label .eurth-flap > span {
-  background: transparent;
+  background: var(--card-bg, var(--eurth-panel));
 }
 
 .eurth-flap .t > i,

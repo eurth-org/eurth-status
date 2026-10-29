@@ -308,7 +308,7 @@ export default function EurthConsole({
             <Radar flights={flights} selected={selected} mayday={mayday} onSelect={setSelected} />
           </div>
           <p className="eurth-caption">
-            Bearing = checking airport from {HOME.code} · range = response time · ring = 100 ms
+            Bearing = checking airport from {HOME.code} · range = response time · rings 50 · 100 · 250 · 500 ms
           </p>
           <DataBlock flight={flights.find((f) => f.id === selected)} id={selected} />
         </div>

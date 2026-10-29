@@ -3,8 +3,9 @@
 import { MouseEvent, useEffect, useRef } from 'react'
 import { AIRPORTS, Flight, bearingTo, hashOf } from './fleet'
 
-const RING_MS = 100
-const MAX_MS = 500
+// Square-root range scale: fast sites still spread out, slow ones stay on the scope
+const RINGS_MS = [50, 100, 250, 500]
+const MAX_MS = 1000
 const SWEEP_MS = 6000
 export const GHOST_ID = 'ORN001'
 const GHOST = { x: 0.62, y: -0.48 }
@@ -63,7 +64,7 @@ export default function Radar({
       const polar = (a: number, r: number): [number, number] => [R + Math.sin(a) * r, R - Math.cos(a) * r]
       const inner = R * 0.08
       const outer = R * 0.9
-      const range = (ms: number) => inner + (Math.min(ms, MAX_MS) / MAX_MS) * (outer - inner)
+      const range = (ms: number) => inner + Math.sqrt(Math.min(ms, MAX_MS) / MAX_MS) * (outer - inner)
       const sweep = reduce ? Math.PI * 0.35 : ((t / SWEEP_MS) % 1) * Math.PI * 2
       const since = (a: number) => {
         const two = Math.PI * 2
@@ -83,7 +84,7 @@ export default function Radar({
       // range rings every 100 ms, compass ticks every 10°, runway-style headings
       ctx.strokeStyle = C.rule
       ctx.lineWidth = 1
-      for (let ms = RING_MS; ms < MAX_MS; ms += RING_MS) {
+      for (const ms of RINGS_MS) {
         ctx.beginPath()
         ctx.arc(R, R, range(ms), 0, Math.PI * 2)
         ctx.stroke()
@@ -121,13 +122,15 @@ export default function Radar({
         ctx.fillText(label, x, y)
       })
       ctx.textAlign = 'left'
-      for (let ms = RING_MS; ms < MAX_MS; ms += RING_MS) {
-        ctx.fillText(`${ms}`, R + 3, R - range(ms) + 8)
+      // ring labels along 120°, where Western European traffic rarely shows up
+      for (const ms of RINGS_MS) {
+        const [x, y] = polar((Math.PI * 2) / 3, range(ms))
+        ctx.fillText(`${ms}`, x + 4, y + 2)
       }
       ctx.fillStyle = C.amber
       ctx.textAlign = 'center'
       ctx.font = font(0.042, 600)
-      ctx.fillText('EBAW', R, R + R * 0.06)
+      ctx.fillText('EBAW', R, R - R * 0.05)
       ctx.beginPath()
       ctx.arc(R, R, 2, 0, Math.PI * 2)
       ctx.fill()
@@ -155,12 +158,13 @@ export default function Radar({
 
       // traffic: flights sharing a gate fan out a few degrees so their data blocks stay readable
       const perGate: Record<string, number> = {}
+      const side: Record<string, boolean> = {}
       blips.current = flights.map((f) => {
         const key = f.gate ?? 'none'
         const n = (perGate[key] = (perGate[key] ?? -1) + 1)
         const airport = f.gate ? AIRPORTS[f.gate] : undefined
         const base = airport ? bearingTo(airport[1], airport[2]) : ((hashOf(f.id) % 360) * Math.PI) / 180
-        const a = base + (n % 2 ? 1 : -1) * Math.ceil(n / 2) * 0.16
+        const a = base + (n % 2 ? 1 : -1) * Math.ceil(n / 2) * 0.28
         const r = f.ping === null ? R * 0.95 : range(f.ping)
         const [x, y] = polar(a, r)
         const color = !f.core
@@ -172,6 +176,8 @@ export default function Radar({
               : f.status === 'sched'
                 ? C.ink
                 : C.scope
+        // the second flight at a gate writes its data block on the other side
+        side[f.id] = x > R * 1.45 || (n % 2 === 1 && x > R * 0.55)
         return { id: f.id, x, y, a, color, flight: f }
       })
 
@@ -213,7 +219,7 @@ export default function Radar({
           ctx.strokeRect(b.x - 8, b.y - 8, 16, 16)
         }
         // data block with leader line, ATC style
-        const left = b.x > R * 1.45
+        const left = side[f.id]
         const lx = b.x + (left ? -10 : 10)
         const ly = b.y - 10
         ctx.globalAlpha = glow * 0.9
@@ -259,7 +265,9 @@ export default function Radar({
       draw(t)
       frame = requestAnimationFrame(loop)
     }
-    redraw.current = () => reduce && draw(0)
+    redraw.current = () => {
+      if (reduce) draw(0)
+    }
     resize()
     if (reduce) draw(0)
     else frame = requestAnimationFrame(loop)
@@ -274,7 +282,9 @@ export default function Radar({
     }
   }, [])
 
-  useEffect(() => redraw.current(), [flights, selected, mayday])
+  useEffect(() => {
+    redraw.current()
+  }, [flights, selected, mayday])
 
   const pick = (e: MouseEvent<HTMLCanvasElement>) => {
     const rect = e.currentTarget.getBoundingClientRect()

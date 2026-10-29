@@ -78,15 +78,16 @@ function loop(time: number) {
     ctx.globalCompositeOperation = 'lighter'
     for (let p = 0; p < PACKETS; p++) {
       const head = (((time / 1000) * SPEED + (p * total) / PACKETS) % total + total) % total
-      // a short comet: bright head, fading tail
-      for (let k = 0; k < 10; k++) {
-        const s = head - k * 4
-        if (s < 0) break
+      // a comet: white-hot head in a cyan halo, fading tail behind it
+      for (let k = 15; k >= 0; k--) {
+        const s = head - k * 5
+        if (s < 0) continue
         const [x, y] = pointAt(t, s)
-        const fade = 1 - k / 10
-        const radius = k === 0 ? 7 : 3 * fade
+        const fade = 1 - k / 16
+        const radius = k === 0 ? 14 : 5 * fade
         const g = ctx.createRadialGradient(x, y, 0, x, y, radius)
-        g.addColorStop(0, `rgba(214,250,255,${0.95 * fade})`)
+        g.addColorStop(0, `rgba(235,253,255,${fade})`)
+        g.addColorStop(k === 0 ? 0.18 : 0.4, `rgba(95,212,230,${0.75 * fade})`)
         g.addColorStop(1, 'rgba(95,212,230,0)')
         ctx.fillStyle = g
         ctx.beginPath()
