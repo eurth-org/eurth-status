@@ -1,5 +1,10 @@
 name: Upstream Sync
 
+# Eurth fork: merges upstream UptimeFlare into main instead of replacing every file.
+# The original workflow deleted everything except uptime.config.ts, which would undo
+# the worker rename, logo, favicon and the Eurth theme (styles/eurth.css).
+# Monitor history lives in the Cloudflare D1 database and is never touched by this.
+
 permissions:
   contents: write
   actions: write
@@ -7,51 +12,46 @@ permissions:
 on:
   workflow_dispatch:
     inputs:
-      manual-trigger:
-        description: 'This will pull the upstream code while preserving your configuration file. Configuration file compatibility is not guaranteed, and you may need to manually update the configuration file after pulling.'
-        type: boolean
-        required: true
-        default: false
       override-token:
-        description: '[Optional] Paste a PAT here. If left blank, PAT_TOKEN secret will be used (if set). Used to solve `refusing to allow a GitHub App to create or update workflow... `, more info at https://github.com/lyc8503/UptimeFlare/wiki/Synchronize-updates-from-upstream#upgrade-methods'
+        description: '[Optional] Paste a PAT here. If left blank, PAT_TOKEN secret will be used (if set). Needed when upstream changes files under .github/workflows, more info at https://github.com/lyc8503/UptimeFlare/wiki/Synchronize-updates-from-upstream#upgrade-methods'
         required: false
 
 jobs:
   sync_latest_from_upstream:
-    name: Sync latest commits from upstream repo
+    name: Merge latest commits from upstream repo
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout target repo
         uses: actions/checkout@v3
         with:
+          fetch-depth: 0
           token: ${{ inputs.override-token || secrets.PAT_TOKEN || secrets.GITHUB_TOKEN }}
 
-      - name: Current config
-        run: |
-          cat uptime.config.ts
-          cp uptime.config.ts /tmp/origin.config.ts
-
-      - name: Sync upstream changes
+      - name: Merge upstream changes
         id: sync
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          # Fetch latest code
-          git clone https://github.com/lyc8503/UptimeFlare /tmp/latest
-          rm -rf /tmp/latest/.git
+          git remote add upstream https://github.com/lyc8503/UptimeFlare.git
+          git fetch upstream main
 
-          # Clean current repo and update
-          git rm -rf '*'
-          cp -r /tmp/latest/. .
-          cp /tmp/origin.config.ts uptime.config.ts
-          git add .
-          git commit -m "Sync latest code from upstream"
+          if git merge-base --is-ancestor upstream/main HEAD; then
+            echo "Already up to date with upstream."
+            exit 0
+          fi
+
+          if ! git merge --no-ff upstream/main -m "Merge latest UptimeFlare upstream"; then
+            git merge --abort
+            echo "::error::Upstream changes conflict with Eurth customisations. Merge upstream/main by hand in a pull request."
+            exit 1
+          fi
           git push
+          echo "merged=true" >> "$GITHUB_OUTPUT"
 
       - name: Trigger deployment
-        if: ${{ inputs.override-token == '' }}
+        if: ${{ steps.sync.outputs.merged == 'true' && inputs.override-token == '' }}
         uses: benc-uk/workflow-dispatch@v1
         with:
           workflow: deploy.yml
