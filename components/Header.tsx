@@ -27,7 +27,7 @@ export default function Header({ style }: { style?: React.CSSProperties }) {
       <Container size="md" className={classes.inner}>
         <div>
           <a
-            href={location.pathname == '/' ? 'https://github.com/lyc8503/UptimeFlare' : '/'}
+            href={location.pathname == '/' ? 'https://eurth.org/?ref=status.eurth.org' : '/'}
             target={location.pathname == '/' ? '_blank' : undefined}
           >
             <Image

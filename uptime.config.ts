@@ -5,15 +5,29 @@
 // Don't edit this line
 import { MaintenanceConfig, PageConfig, WorkerConfig } from './types/config'
 
+// Tags outgoing links so the sites we link to can see the visit came from the status page
+const ref = (url: string) => {
+  const u = new URL(url)
+  u.searchParams.set('ref', 'status.eurth.org')
+  return u.toString()
+}
+
 const pageConfig: PageConfig = {
   // Title for your status page
   title: "Eurth Community Status Page",
   // Links shown at the header of your status page, could set `highlight` to `true`
   links: [
-    { link: 'https://github.com/eurth-org/eurth-status', label: 'GitHub' },
-    { link: 'https://eurth.org/', label: 'Forum' },
-    { link: 'mailto:orioni.europa@gmail.com', label: 'Email Me', highlight: true },
+    { link: ref('https://github.com/eurth-org/eurth-status'), label: 'GitHub' },
+    { link: ref('https://eurth.org/'), label: 'Forum' },
+    // Reports land in the eurth-org repo, so the whole team sees them
+    { link: ref('https://github.com/eurth-org/eurth-status/issues/new'), label: 'Report a problem', highlight: true },
   ],
+  // Monitors are shown per group, in this order; a monitor left out of every group is hidden
+  group: {
+    'Core platforms': ['eurth_homepage', 'eurth_map', 'eurth_news'],
+    'Legacy platform': ['europans_homepage'],
+  },
+  customFooter: `<p class="eurth-footer">Monitoring for the <a href="${ref('https://eurth.org/')}" target="_blank">Eurth</a> community · powered by <a href="${ref('https://github.com/lyc8503/UptimeFlare')}" target="_blank">UptimeFlare</a>, made with ❤ by <a href="${ref('https://github.com/lyc8503')}" target="_blank">lyc8503</a>.</p>`,
 }
 
 const workerConfig: WorkerConfig = {
@@ -29,7 +43,7 @@ const workerConfig: WorkerConfig = {
       target: 'https://eurth.org',
       checkProxy: 'worker://weur',
       tooltip: 'Primary homepage monitor',
-      statusPageLink: 'https://eurth.org',
+      statusPageLink: ref('https://eurth.org'),
       expectedCodes: [200],
       timeout: 10000,
       headers: {
@@ -48,7 +62,7 @@ const workerConfig: WorkerConfig = {
       target: 'https://map.eurth.org',
       checkProxy: 'worker://weur',
       tooltip: 'Map subdomain monitor',
-      statusPageLink: 'https://map.eurth.org',
+      statusPageLink: ref('https://map.eurth.org'),
       expectedCodes: [200],
       timeout: 10000,
       headers: {
@@ -67,7 +81,7 @@ const workerConfig: WorkerConfig = {
       target: 'https://news.eurth.org',
       checkProxy: 'worker://weur',
       tooltip: 'News subdomain monitor',
-      statusPageLink: 'https://news.eurth.org',
+      statusPageLink: ref('https://news.eurth.org'),
       expectedCodes: [200],
       timeout: 10000,
       headers: {
@@ -85,8 +99,8 @@ const workerConfig: WorkerConfig = {
       method: 'GET',
       target: 'https://www.europans.com',
       checkProxy: 'worker://weur',
-      tooltip: 'Primary homepage monitor',
-      statusPageLink: 'https://www.europans.com',
+      tooltip: 'Legacy domain, kept online for monitoring',
+      statusPageLink: ref('https://www.europans.com'),
       expectedCodes: [200],
       timeout: 10000,
       headers: {
