@@ -9,6 +9,8 @@ import MonitorList from '@/components/MonitorList'
 import { Center, Text } from '@mantine/core'
 import MonitorDetail from '@/components/MonitorDetail'
 import Footer from '@/components/Footer'
+// Eurth fork change: tower console (radar, flip cards, departures board) around the overall status
+import EurthConsole from '@/components/eurth/Console'
 import { useTranslation } from 'react-i18next'
 import { CompactedMonitorStateWrapper, getFromStore } from '@/worker/src/store'
 
@@ -57,7 +59,9 @@ export default function Home({
           </Center>
         ) : (
           <div>
-            <OverallStatus state={state} monitors={monitors} maintenances={maintenances} />
+            <EurthConsole state={state} monitors={monitors}>
+              <OverallStatus state={state} monitors={monitors} maintenances={maintenances} />
+            </EurthConsole>
             <MonitorList monitors={monitors} state={state} />
           </div>
         )}

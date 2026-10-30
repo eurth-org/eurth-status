@@ -26,6 +26,7 @@ export default function Header({ style }: { style?: React.CSSProperties }) {
     <header className={classes.header} style={style}>
       <Container size="md" className={classes.inner}>
         <div>
+          {/* Eurth fork change: the wordmark links to eurth.org */}
           <a
             href={location.pathname == '/' ? 'https://eurth.org/?ref=status.eurth.org' : '/'}
             target={location.pathname == '/' ? '_blank' : undefined}

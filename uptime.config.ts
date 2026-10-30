@@ -17,15 +17,16 @@ const pageConfig: PageConfig = {
   title: "Eurth Community Status Page",
   // Links shown at the header of your status page, could set `highlight` to `true`
   links: [
-    { link: ref('https://github.com/eurth-org/eurth-status'), label: 'GitHub' },
-    { link: ref('https://eurth.org/'), label: 'Forum' },
-    // Reports land in the eurth-org repo, so the whole team sees them
-    { link: ref('https://github.com/eurth-org/eurth-status/issues/new'), label: 'Report a problem', highlight: true },
+    { link: ref('https://github.com/eurth-org/eurth-status'), label: 'Hangar' },
+    { link: ref('https://eurth.org/'), label: 'Terminal' },
+    // Hangar = the code on GitHub, Terminal = the forum; tower calls land as issues in the eurth-org repo,
+    // so the whole team sees them
+    { link: ref('https://github.com/eurth-org/eurth-status/issues/new'), label: 'Call the tower', highlight: true },
   ],
   // Monitors are shown per group, in this order; a monitor left out of every group is hidden
   group: {
-    'Core platforms': ['eurth_homepage', 'eurth_map', 'eurth_news'],
-    'Legacy platform': ['europans_homepage'],
+    'Mainline fleet': ['eurth_homepage', 'eurth_map', 'eurth_news', 'eurth_gov'],
+    'Heritage fleet': ['europans_homepage'],
   },
   customFooter: `<p class="eurth-footer">Monitoring for the <a href="${ref('https://eurth.org/')}" target="_blank">Eurth</a> community · powered by <a href="${ref('https://github.com/lyc8503/UptimeFlare')}" target="_blank">UptimeFlare</a>, made with ❤ by <a href="${ref('https://github.com/lyc8503')}" target="_blank">lyc8503</a>.</p>`,
 }
@@ -91,7 +92,26 @@ const workerConfig: WorkerConfig = {
     }, // <-- Closes the second monitor object
 
     // -------------------------------------
-    // Monitor 4: europans_homepage
+    // Monitor 4: eurth_gov
+    // -------------------------------------
+    {
+      id: 'eurth_gov',
+      name: 'gov.eurth.org',
+      method: 'GET',
+      target: 'https://gov.eurth.org',
+      checkProxy: 'worker://weur',
+      tooltip: 'Government subdomain monitor',
+      statusPageLink: ref('https://gov.eurth.org'),
+      expectedCodes: [200],
+      timeout: 10000,
+      headers: {
+        'User-Agent': 'Uptimeflare',
+        Authorization: 'Bearer YOUR_TOKEN_HERE',
+      }, // <-- Closes the headers object
+    }, // <-- Closes the fourth monitor object
+
+    // -------------------------------------
+    // Monitor 5: europans_homepage
     // -------------------------------------
     {
       id: 'europans_homepage',
