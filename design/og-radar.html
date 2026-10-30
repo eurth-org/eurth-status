@@ -1,0 +1,248 @@
+<!doctype html>
+<!--
+  Source of public/og-radar.png, the 1200x630 link-preview image. Regenerate with:
+  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless --hide-scrollbars \
+    --window-size=1200,630 --force-device-scale-factor=1 --virtual-time-budget=4000 \
+    --screenshot=public/og-radar.png design/og-radar.html
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500&display=block"
+    />
+    <style>
+      @font-face {
+        font-family: 'Departure Mono';
+        src: url('../styles/fonts/DepartureMono-Regular.woff2') format('woff2');
+      }
+      :root {
+        --room: #0a161d;
+        --panel: #0f212a;
+        --rule: #1e3a47;
+        --ink: #d6e5ea;
+        --dim: #7f9ba6;
+        --amber: #f2b33d;
+        --scope: #5fd4e6;
+        --ok: #5ad08c;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 1200px;
+        height: 630px;
+        overflow: hidden;
+      }
+      body {
+        position: relative;
+        background-color: var(--room);
+        background-image: linear-gradient(rgba(30, 58, 71, 0.32) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(30, 58, 71, 0.32) 1px, transparent 1px);
+        background-size: 48px 48px;
+        background-position: -1px -1px;
+        color: var(--ink);
+        font-family: 'IBM Plex Sans', sans-serif;
+      }
+      .bar {
+        position: absolute;
+        inset: 0 0 auto;
+        height: 6px;
+        background: var(--amber);
+      }
+      #radar {
+        position: absolute;
+        left: 44px;
+        top: 47px;
+        width: 536px;
+        height: 536px;
+      }
+      .right {
+        position: absolute;
+        left: 640px;
+        top: 64px;
+        width: 520px;
+      }
+      .mono {
+        font-family: 'Departure Mono', monospace;
+        font-size: 22px;
+      }
+      .kicker {
+        color: var(--dim);
+      }
+      .kicker b {
+        color: var(--amber);
+        font-weight: 400;
+      }
+      h1 {
+        margin: 14px 0 0;
+        font-family: 'Barlow Condensed', sans-serif;
+        font-weight: 700;
+        font-size: 108px;
+        line-height: 0.9;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+      h1 span {
+        color: var(--amber);
+      }
+      .tag {
+        margin: 18px 0 0;
+        font-size: 28px;
+        line-height: 1.3;
+        font-weight: 500;
+      }
+      .board {
+        margin-top: 22px;
+        border-top: 1px solid var(--rule);
+      }
+      .board div {
+        display: grid;
+        grid-template-columns: 100px 1fr auto;
+        gap: 12px;
+        padding: 6px 0;
+        border-bottom: 1px solid var(--rule);
+        font-size: 22px;
+      }
+      .board .cs {
+        color: var(--amber);
+      }
+      .board .st {
+        color: var(--ok);
+      }
+      .url {
+        position: absolute;
+        left: 640px;
+        bottom: 40px;
+        color: var(--amber);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="bar"></div>
+    <canvas id="radar" width="1072" height="1072"></canvas>
+    <div class="right">
+      <div class="mono kicker">EURTH TOWER <b>EBAW</b> · INFORMATION <b>ALPHA</b></div>
+      <h1>Eurth<br /><span>Status</span></h1>
+      <p class="tag">Live uptime, checked every minute.</p>
+      <div class="board mono">
+        <div><span class="cs">EUR001</span><span>eurth.org</span><span class="st">ON TIME</span></div>
+        <div><span class="cs">MAP002</span><span>map.eurth.org</span><span class="st">ON TIME</span></div>
+        <div><span class="cs">NWS003</span><span>news.eurth.org</span><span class="st">ON TIME</span></div>
+        <div><span class="cs">GOV004</span><span>gov.eurth.org</span><span class="st">ON TIME</span></div>
+      </div>
+    </div>
+    <div class="url mono">status.eurth.org</div>
+    <script>
+      // The radar scope from the console, drawn still at 2x for a crisp preview
+      document.fonts.load("22px 'Departure Mono'").then(() => {
+        const cv = document.getElementById('radar')
+        const ctx = cv.getContext('2d')
+        ctx.scale(2, 2)
+        const R = 268
+        const C = { rule: '#1e3a47', dim: '#7f9ba6', ink: '#d6e5ea', amber: '#f2b33d', scope: '#5fd4e6' }
+        const polar = (deg, r) => [R + Math.sin((deg * Math.PI) / 180) * r, R - Math.cos((deg * Math.PI) / 180) * r]
+        const bg = ctx.createRadialGradient(R, R, 0, R, R, R)
+        bg.addColorStop(0, '#0c2630')
+        bg.addColorStop(1, '#06141a')
+        ctx.fillStyle = bg
+        ctx.beginPath()
+        ctx.arc(R, R, R, 0, Math.PI * 2)
+        ctx.fill()
+        ctx.strokeStyle = C.rule
+        ctx.lineWidth = 1.5
+        for (const f of [0.3, 0.5, 0.7, 0.9]) {
+          ctx.beginPath()
+          ctx.arc(R, R, R * f, 0, Math.PI * 2)
+          ctx.stroke()
+        }
+        for (let d = 0; d < 360; d += 10) {
+          const [x1, y1] = polar(d, R * (d % 30 ? 0.95 : 0.91))
+          const [x2, y2] = polar(d, R * 0.99)
+          ctx.beginPath()
+          ctx.moveTo(x1, y1)
+          ctx.lineTo(x2, y2)
+          ctx.stroke()
+        }
+        ctx.globalAlpha = 0.35
+        ctx.beginPath()
+        ctx.moveTo(R, 12)
+        ctx.lineTo(R, R * 2 - 12)
+        ctx.moveTo(12, R)
+        ctx.lineTo(R * 2 - 12, R)
+        ctx.stroke()
+        ctx.globalAlpha = 1
+        // sweep with afterglow
+        const sweep = 62
+        const a = ((sweep - 90) * Math.PI) / 180
+        const cg = ctx.createConicGradient(a - Math.PI * 0.6, R, R)
+        cg.addColorStop(0, 'rgba(95,212,230,0)')
+        cg.addColorStop(1, 'rgba(95,212,230,.32)')
+        ctx.fillStyle = cg
+        ctx.beginPath()
+        ctx.moveTo(R, R)
+        ctx.arc(R, R, R, a - Math.PI * 0.6, a)
+        ctx.closePath()
+        ctx.fill()
+        const [sx, sy] = polar(sweep, R)
+        ctx.strokeStyle = C.scope
+        ctx.lineWidth = 2.5
+        ctx.beginPath()
+        ctx.moveTo(R, R)
+        ctx.lineTo(sx, sy)
+        ctx.stroke()
+        // labels
+        ctx.font = "22px 'Departure Mono'"
+        ctx.fillStyle = C.dim
+        ctx.textAlign = 'center'
+        ctx.textBaseline = 'middle'
+        for (const [l, d] of [['36', 0], ['09', 90], ['18', 180], ['27', 270]]) {
+          const [x, y] = polar(d, R * 0.83)
+          ctx.fillText(l, x, y)
+        }
+        ctx.fillStyle = C.amber
+        ctx.fillText('EBAW', R, R - 22)
+        ctx.beginPath()
+        ctx.arc(R, R, 3, 0, Math.PI * 2)
+        ctx.fill()
+        // traffic: bearing towards the checking airport, range by response time
+        const traffic = [
+          { cs: 'EUR001', l2: '057 AMS', deg: 12, r: 0.62, side: 1, up: 1, c: C.scope },
+          { cs: 'MAP002', l2: '031 AMS', deg: 30, r: 0.33, side: 1, up: 0, c: C.scope },
+          { cs: 'GOV004', l2: '014 AMS', deg: -8, r: 0.26, side: -1, up: 1, c: C.scope },
+          { cs: 'NWS003', l2: '036 CDG', deg: 205, r: 0.42, side: 1, up: 0, c: C.scope },
+          { cs: 'EPN901', l2: '062 LHR', deg: 265, r: 0.62, side: 1, up: 1, c: C.dim },
+        ]
+        ctx.textAlign = 'left'
+        ctx.textBaseline = 'alphabetic'
+        for (const t of traffic) {
+          const [x, y] = polar(t.deg, R * t.r)
+          ctx.fillStyle = t.c
+          ctx.shadowColor = t.c
+          ctx.shadowBlur = 12
+          ctx.beginPath()
+          if (t.c === C.dim) ctx.rect(x - 5, y - 5, 10, 10)
+          else ctx.arc(x, y, 6, 0, Math.PI * 2)
+          ctx.fill()
+          ctx.shadowBlur = 0
+          const w = ctx.measureText(t.cs).width
+          const bx = t.side > 0 ? x + 16 : x - 16 - w
+          const by = t.up ? y - 50 : y + 14
+          ctx.strokeStyle = t.c
+          ctx.lineWidth = 1.5
+          ctx.beginPath()
+          ctx.moveTo(x + t.side * 6, y + (t.up ? -6 : 6))
+          ctx.lineTo(t.side > 0 ? bx - 3 : bx + w + 3, t.up ? by + 38 : by)
+          ctx.stroke()
+          ctx.fillText(t.cs, bx, by + 18)
+          ctx.fillText(t.l2, bx, by + 40)
+        }
+        ctx.strokeStyle = C.rule
+        ctx.lineWidth = 3
+        ctx.beginPath()
+        ctx.arc(R, R, R - 1.5, 0, Math.PI * 2)
+        ctx.stroke()
+      })
+    </script>
+  </body>
+</html>

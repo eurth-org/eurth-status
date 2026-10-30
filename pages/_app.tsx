@@ -5,12 +5,14 @@ import type { AppProps } from 'next/app'
 import { MantineProvider } from '@mantine/core'
 import NoSsr from '@/components/NoSsr'
 import { eurthFonts, eurthTheme } from '@/styles/eurth'
+import AnimatedFavicon from '@/components/eurth/Favicon'
 import '@/util/i18n'
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <NoSsr>
       <style>{eurthFonts}</style>
+      <AnimatedFavicon />
       <MantineProvider theme={eurthTheme} forceColorScheme="dark">
         <Component {...pageProps} />
       </MantineProvider>

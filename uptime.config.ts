@@ -14,7 +14,10 @@ const ref = (url: string) => {
 
 const pageConfig: PageConfig = {
   // Title for your status page
-  title: "Eurth Community Status Page",
+  // Also the search and link-preview title (components/eurth/HeadMeta.tsx); keep it under 60 characters
+  title: "Eurth Status · Live uptime for eurth.org, map, news and gov",
+  // Static radar icon; the page animates it in the tab (components/eurth/Favicon.tsx)
+  favicon: '/eurth-favicon.svg',
   // Links shown at the header of your status page, could set `highlight` to `true`
   links: [
     { link: ref('https://github.com/eurth-org/eurth-status'), label: 'Hangar' },
