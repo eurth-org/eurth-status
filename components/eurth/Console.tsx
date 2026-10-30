@@ -343,7 +343,7 @@ export default function EurthConsole({
         <div className="eurth-bezel eurth-scope">
           <div className="eurth-bezel-head">
             <h2>
-              <AnimatedIcon name="radar" /> Radar · {HOME.code} approach
+              <Icon name="satellite-dish" /> Radar · {HOME.code} approach
             </h2>
             <span className="meta">sweep 6 s</span>
           </div>
