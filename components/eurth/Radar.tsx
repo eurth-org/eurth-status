@@ -70,7 +70,8 @@ export default function Radar({
         const two = Math.PI * 2
         return (((sweep - (((a % two) + two) % two)) % two) + two) % two
       }
-      const font = (px: number, weight = 500) => `${weight} ${Math.max(8.5, R * px)}px ${C.mono}`
+      // Departure Mono is drawn on an 11 px grid
+      const font = () => `11px ${C.mono}`
 
       ctx.clearRect(0, 0, R * 2, R * 2)
       const bg = ctx.createRadialGradient(R, R, 0, R, R, R)
@@ -107,7 +108,7 @@ export default function Radar({
       ctx.stroke()
       ctx.globalAlpha = 1
       ctx.fillStyle = C.dim
-      ctx.font = font(0.05)
+      ctx.font = font()
       ctx.textAlign = 'center'
       ctx.textBaseline = 'middle'
       ;(
@@ -129,7 +130,7 @@ export default function Radar({
       }
       ctx.fillStyle = C.amber
       ctx.textAlign = 'center'
-      ctx.font = font(0.042, 600)
+      ctx.font = font()
       ctx.fillText('EBAW', R, R - R * 0.05)
       ctx.beginPath()
       ctx.arc(R, R, 2, 0, Math.PI * 2)
@@ -183,6 +184,12 @@ export default function Radar({
 
       ctx.textAlign = 'left'
       ctx.textBaseline = 'alphabetic'
+      // data blocks keep clear of the centre label, every blip and each other
+      const placed: number[][] = [[R - 16, R - R * 0.05 - 9, 32, 11]]
+      for (const b of blips.current) placed.push([b.x - 5, b.y - 5, 10, 10])
+      const clear = (r: number[]) =>
+        placed.every((q) => r[0] > q[0] + q[2] || r[0] + r[2] < q[0] || r[1] > q[1] + q[3] || r[1] + r[3] < q[1])
+
       for (const b of blips.current) {
         const f = b.flight
         const glow = reduce ? 1 : Math.max(0.3, 1 - (since(b.a) / (Math.PI * 2)) * 1.25)
@@ -218,27 +225,32 @@ export default function Radar({
           ctx.lineWidth = 1
           ctx.strokeRect(b.x - 8, b.y - 8, 16, 16)
         }
-        // data block with leader line, ATC style
-        const left = side[f.id]
-        const lx = b.x + (left ? -10 : 10)
-        const ly = b.y - 10
-        ctx.globalAlpha = glow * 0.9
-        ctx.strokeStyle = b.color
-        ctx.beginPath()
-        ctx.moveTo(b.x + (left ? -4 : 4), b.y - 4)
-        ctx.lineTo(lx, ly + 2)
-        ctx.stroke()
-        ctx.textAlign = left ? 'right' : 'left'
-        ctx.font = font(0.045, 600)
-        ctx.fillText(f.callsign, lx + (left ? -2 : 2), ly - 2)
-        ctx.font = font(0.04)
+        // data block with leader line, ATC style: the first free spot of up-right, up-left,
+        // down-right and down-left (left first where the blip shares its gate or sits far right)
+        ctx.font = font()
         const second =
           f.status === 'cancelled'
             ? 'DOWN 7700'
             : f.status === 'sched'
               ? 'INBOUND'
               : `${String(f.ping).padStart(3, '0')} ${f.gate ?? ''}`
-        ctx.fillText(second, lx + (left ? -2 : 2), ly + R * 0.05)
+        const w = Math.max(ctx.measureText(f.callsign).width, ctx.measureText(second).width)
+        const spots: [number, number][] = side[f.id]
+          ? [[-1, -1], [1, -1], [-1, 1], [1, 1]]
+          : [[1, -1], [-1, -1], [1, 1], [-1, 1]]
+        const box = ([dx, dy]: [number, number]) => [dx > 0 ? b.x + 12 : b.x - 12 - w, dy < 0 ? b.y - 31 : b.y + 7, w, 24]
+        const spot = spots.find((sp) => clear(box(sp))) ?? spots[0]
+        const [x, y] = box(spot)
+        placed.push(box(spot))
+        ctx.globalAlpha = glow * 0.9
+        ctx.strokeStyle = b.color
+        ctx.beginPath()
+        ctx.moveTo(b.x + spot[0] * 4, b.y + spot[1] * 4)
+        ctx.lineTo(spot[0] > 0 ? x - 2 : x + w + 2, spot[1] < 0 ? y + 24 : y)
+        ctx.stroke()
+        ctx.textAlign = 'left'
+        ctx.fillText(f.callsign, x, y + 9)
+        ctx.fillText(second, x, y + 21)
       }
 
       // something unlisted at the edge of coverage
@@ -269,8 +281,11 @@ export default function Radar({
       if (reduce) draw(0)
     }
     resize()
-    if (reduce) draw(0)
-    else frame = requestAnimationFrame(loop)
+    if (reduce) {
+      draw(0)
+      // the still picture has to wait for the pixel font to arrive
+      document.fonts?.ready.then(() => draw(0))
+    } else frame = requestAnimationFrame(loop)
     const ro = new ResizeObserver(() => {
       resize()
       if (reduce) draw(0)

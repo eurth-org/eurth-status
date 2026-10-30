@@ -2,7 +2,8 @@
 // split-flap cards for the mainline fleet and a departures board for every monitor.
 import { ReactNode, useEffect, useMemo, useState } from 'react'
 import { MonitorState, MonitorTarget } from '@/types/config'
-import Icon, { IconName } from './icons'
+import Icon from './icons'
+import AnimatedIcon from './animated'
 import Radar, { GHOST_ID } from './Radar'
 import SplitFlap from './SplitFlap'
 import {
@@ -17,12 +18,13 @@ import {
   buildFlights,
 } from './fleet'
 
-const STATUS_ICON: Record<FlightStatus, IconName> = {
-  ontime: 'circle-check',
-  delayed: 'hourglass-half',
-  cancelled: 'circle-xmark',
-  maint: 'wrench',
-  sched: 'plane-arrival',
+// On time gets a ticking clock; the others animate as line-md draws them
+function StatusIcon({ status }: { status: FlightStatus }) {
+  if (status === 'maint') return <Icon name="wrench" />
+  const name = (
+    { ontime: 'clock', delayed: 'alert-circle-loop', cancelled: 'close-circle', sched: 'loading-loop' } as const
+  )[status]
+  return <AnimatedIcon name={name} />
 }
 
 function ago(seconds: number) {
@@ -148,7 +150,7 @@ function FlightCard({
       <span className="eurth-card-head">
         <span className="cs">{flight.callsign}</span>
         <span className="st">
-          <Icon name={STATUS_ICON[flight.status]} />
+          <StatusIcon status={flight.status} />
           {STATUS_LABEL[flight.status]}
         </span>
       </span>
@@ -175,21 +177,29 @@ function TowerReadouts({ flights }: { flights: Flight[] }) {
   return (
     <div className="eurth-tower-readouts">
       <div>
-        <em>On time</em>
+        <em>
+          <AnimatedIcon name="clock" /> On time
+        </em>
         <b className={onTime === tracked.length ? 'ok' : 'warn'}>
           {onTime}/{tracked.length}
         </b>
       </div>
       <div>
-        <em>Avg ping</em>
+        <em>
+          <AnimatedIcon name="speedometer-loop" /> Avg ping
+        </em>
         <b>{avg === null ? '---' : `${avg} ms`}</b>
       </div>
       <div>
-        <em>Incidents · 24 h</em>
+        <em>
+          <AnimatedIcon name={incidents ? 'bell-alert-loop' : 'bell'} /> Incidents · 24 h
+        </em>
         <b className={incidents ? 'warn' : undefined}>{incidents}</b>
       </div>
       <div title={gates.map(airportName).join(', ')}>
-        <em>Gates</em>
+        <em>
+          <AnimatedIcon name="map-marker-alt-loop" /> Gates
+        </em>
         <b>{gates.join(' · ') || '---'}</b>
       </div>
     </div>
@@ -286,6 +296,7 @@ function Board({
               {f.ping === null ? '---' : `${f.ping} ms`}
             </span>
             <span className={`st ${f.status}`} role="cell">
+              <StatusIcon status={f.status} />
               {STATUS_LABEL[f.status]}
             </span>
           </div>
@@ -332,7 +343,7 @@ export default function EurthConsole({
         <div className="eurth-bezel eurth-scope">
           <div className="eurth-bezel-head">
             <h2>
-              <Icon name="satellite-dish" /> Radar · {HOME.code} approach
+              <AnimatedIcon name="radar" /> Radar · {HOME.code} approach
             </h2>
             <span className="meta">sweep 6 s</span>
           </div>

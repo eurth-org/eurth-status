@@ -2,6 +2,7 @@
 // so UptimeFlare updates merge without conflicts; styles/eurth.css holds the rest.
 import { createTheme, MantineColorsTuple } from '@mantine/core'
 import { Barlow_Condensed, IBM_Plex_Mono, IBM_Plex_Sans } from 'next/font/google'
+import localFont from 'next/font/local'
 import { setupCharts } from '@/components/eurth/chartFx'
 import '@/components/eurth/wording'
 
@@ -9,8 +10,12 @@ import '@/components/eurth/wording'
 const display = Barlow_Condensed({ subsets: ['latin', 'latin-ext'], weight: ['500', '600', '700'] })
 const body = IBM_Plex_Sans({ subsets: ['latin', 'latin-ext'], weight: ['400', '500', '600'] })
 const mono = IBM_Plex_Mono({ subsets: ['latin', 'latin-ext'], weight: ['400', '500', '600'] })
+// Departure Mono by Helena Zhang, SIL OFL 1.1 (styles/fonts/DepartureMono-LICENSE.txt). A pixel font
+// drawn on an 11 px grid, so monospace text sits at 11 or 22 px; Plex Mono covers missing glyphs.
+const departure = localFont({ src: './fonts/DepartureMono-Regular.woff2', display: 'swap' })
+const monoStack = `${departure.style.fontFamily}, ${mono.style.fontFamily}`
 
-export const eurthFonts = `:root{--eurth-display:${display.style.fontFamily};--eurth-body:${body.style.fontFamily};--eurth-mono:${mono.style.fontFamily}}`
+export const eurthFonts = `:root{--eurth-display:${display.style.fontFamily};--eurth-body:${body.style.fontFamily};--eurth-mono:${monoStack}}`
 
 // Mantine's dark scheme reads text from [0], dimmed text from [2], borders from [4],
 // hover from [5], component surfaces from [6] and the page from [7]
@@ -50,4 +55,4 @@ export const eurthTheme = createTheme({
   defaultRadius: 'xs',
 })
 
-setupCharts(mono.style.fontFamily)
+setupCharts(monoStack)
