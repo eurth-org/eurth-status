@@ -164,6 +164,38 @@ function FlightCard({
   )
 }
 
+// Live readouts under the tower report headline
+function TowerReadouts({ flights }: { flights: Flight[] }) {
+  const tracked = flights.filter((f) => f.status !== 'sched')
+  const onTime = tracked.filter((f) => f.status === 'ontime').length
+  const pings = tracked.filter((f) => f.status !== 'cancelled' && f.ping !== null).map((f) => f.ping!)
+  const avg = pings.length ? Math.round(pings.reduce((a, b) => a + b, 0) / pings.length) : null
+  const incidents = flights.reduce((n, f) => n + f.incidents24h, 0)
+  const gates = Array.from(new Set(tracked.map((f) => f.gate).filter(Boolean)))
+  return (
+    <div className="eurth-tower-readouts">
+      <div>
+        <em>On time</em>
+        <b className={onTime === tracked.length ? 'ok' : 'warn'}>
+          {onTime}/{tracked.length}
+        </b>
+      </div>
+      <div>
+        <em>Avg ping</em>
+        <b>{avg === null ? '---' : `${avg} ms`}</b>
+      </div>
+      <div>
+        <em>Incidents · 24 h</em>
+        <b className={incidents ? 'warn' : undefined}>{incidents}</b>
+      </div>
+      <div title={gates.map(airportName).join(', ')}>
+        <em>Gates</em>
+        <b>{gates.join(' · ') || '---'}</b>
+      </div>
+    </div>
+  )
+}
+
 function DataBlock({ flight, id }: { flight?: Flight; id: string | null }) {
   if (id === GHOST_ID)
     return (
@@ -321,6 +353,7 @@ export default function EurthConsole({
               <span className="meta">auto-refresh every 5 min</span>
             </div>
             {children}
+            <TowerReadouts flights={flights} />
           </div>
           <div className="eurth-cards">
             {core.map((f, i) => (
