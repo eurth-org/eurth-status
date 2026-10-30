@@ -11,6 +11,7 @@ export function setupCharts(monoFont: string) {
   Chart.defaults.color = '#7f9ba6'
   Chart.defaults.borderColor = '#1e3a47'
   Chart.defaults.font.family = monoFont
+  Chart.defaults.font.size = 11
   // set() creates the path, which only exists once DetailChart registers the Tooltip plugin
   Chart.defaults.set('plugins.tooltip', {
     backgroundColor: '#07121a',
@@ -21,6 +22,10 @@ export function setupCharts(monoFont: string) {
     cornerRadius: 2,
   })
   Chart.register(trace, packets)
+  // charts drawn before the pixel font loaded pick it up on a quiet redraw
+  if (typeof document !== 'undefined') {
+    document.fonts?.ready.then(() => Object.values(Chart.instances).forEach((chart) => chart.update('none')))
+  }
 }
 
 const trace: Plugin<'line'> = {

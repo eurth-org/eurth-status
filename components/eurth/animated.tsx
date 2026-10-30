@@ -1,0 +1,46 @@
+// Animated line icons. Most come from line-md by Vjacheslav Trushkin (MIT,
+// https://github.com/cyberalien/line-md); line-md has no clock or radar, so those two are
+// drawn here in the same style. With reduced motion every icon is shown at rest.
+import { useEffect, useRef } from 'react'
+
+const LINE_MD = {
+  'speedometer-loop': `<defs><mask id="SVGSwRBedzm"><path fill="none" stroke="#fff" stroke-dasharray="46" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.64 19.36c-3.52 -3.51 -3.52 -9.21 0 -12.72c3.51 -3.52 9.21 -3.52 12.72 -0c3.52 3.51 3.52 9.21 0 12.72"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="46;0"/></path><path d="M12 14c0 0 0 0 0 0c0 0 0 0 0 0c0 0 0 0 0 0c0 0 0 0 0 0Z" transform="rotate(-100 12 13)"><animate fill="freeze" attributeName="d" begin="0.5s" dur="0.2s" to="M17 13c0 2.76 -2.24 5 -5 5c-2.76 0 -5 -2.24 -5 -5c0 -2.76 5 -15 5 -15c0 0 5 12.24 5 15Z"/><animateTransform attributeName="transform" begin="0.7s" dur="6s" keyTimes="0;0.08;0.2;0.28;0.36;0.44;0.52;0.6;0.76;0.84;0.92;1" repeatCount="indefinite" type="rotate" values="-100 12 13;65 12 13;65 12 13;30 12 13;10 12 13;0 12 13;35 12 13;55 12 13;75 12 13;15 12 13;-20 12 13;-100 12 13"/></path></mask></defs><g fill="currentColor"><path d="M0 0h24v24H0z" mask="url(#SVGSwRBedzm)"/><path d="M15 13c0 1.66 -1.34 3 -3 3c-1.66 0 -3 -1.34 -3 -3c0 -1.66 3 -11 3 -11c0 0 3 9.34 3 11Z" opacity="0" transform="rotate(-100 12 13)"><set fill="freeze" attributeName="opacity" begin="0.5s" to="1"/><animate fill="freeze" attributeName="d" begin="0.5s" dur="0.2s" values="M12 14c0 0 0 0 0 0c0 0 0 0 0 0c0 0 0 0 0 0c0 0 0 0 0 0Z;M15 13c0 1.66 -1.34 3 -3 3c-1.66 0 -3 -1.34 -3 -3c0 -1.66 3 -11 3 -11c0 0 3 9.34 3 11Z"/><animateTransform attributeName="transform" begin="0.7s" dur="6s" keyTimes="0;0.08;0.2;0.28;0.36;0.44;0.52;0.6;0.76;0.84;0.92;1" repeatCount="indefinite" type="rotate" values="-100 12 13;65 12 13;65 12 13;30 12 13;10 12 13;0 12 13;35 12 13;55 12 13;75 12 13;15 12 13;-20 12 13;-100 12 13"/></path></g>`,
+  'map-marker-alt-loop': `<path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 20.5c0 0 -6 -7 -6 -11.5c0 -3.31 2.69 -6 6 -6c3.31 0 6 2.69 6 6c0 4.5 -6 11.5 -6 11.5Z"><animate fill="freeze" attributeName="d" dur="0.4s" keyTimes="0;0.7;1" values="M12 20.5c0 0 -1 -1.5 -1 -2.5c0 -0.5 0.5 -1 1 -1c0.5 0 1 0.5 1 1c0 1 -1 2.5 -1 2.5Z;M12 20.5c0 0 -7 -7.5 -7 -12.5c0 -3.5 3 -7 7 -7c4 0 7 3.5 7 7c0 5 -7 12.5 -7 12.5Z;M12 20.5c0 0 -6 -7 -6 -11.5c0 -3.31 2.69 -6 6 -6c3.31 0 6 2.69 6 6c0 4.5 -6 11.5 -6 11.5Z"/><animateTransform attributeName="transform" dur="3s" keyTimes="0;0.3;0.4;0.54;0.6;0.68;0.7;1" repeatCount="indefinite" type="rotate" values="0 12 20.5;0 12 20.5;-8 12 20.5;0 12 20.5;5 12 20.5;-2 12 20.5;0 12 20.5;0 12 20.5"/></path><circle cx="12" cy="9" fill="currentColor"><animate fill="freeze" attributeName="r" begin="0.4s" dur="0.2s" to="2.5"/></circle>`,
+  'bell-alert-loop': `<g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="4" d="M12 3v2"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.2s" values="4;0"/><animateTransform attributeName="transform" dur="6s" keyTimes="0;0.05;0.15;0.2;1" repeatCount="indefinite" type="rotate" values="0 12 3;3 12 3;-3 12 3;0 12 3;0 12 3"/></path><path stroke-dasharray="30" stroke-dashoffset="30" d="M12 5c-3.31 0 -6 2.69 -6 6l0 6c-1 0 -2 1 -2 2h8M12 5c3.31 0 6 2.69 6 6l0 6c1 0 2 1 2 2h-8"><animateTransform attributeName="transform" dur="6s" keyTimes="0;0.05;0.15;0.2;1" repeatCount="indefinite" type="rotate" values="0 12 3;3 12 3;-3 12 3;0 12 3;0 12 3"/><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.2s" dur="0.4s" to="0"/></path><path stroke-dasharray="10" stroke-dashoffset="10" d="M10 20c0 1.1 0.9 2 2 2c1.1 0 2 -0.9 2 -2"><animateTransform attributeName="transform" begin="0.2s" dur="6s" keyTimes="0;0.05;0.15;0.2;1" repeatCount="indefinite" type="rotate" values="0 12 8;6 12 8;-6 12 8;0 12 8;0 12 8"/><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.7s" dur="0.2s" to="0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M22 6v4"><animate attributeName="stroke-width" begin="0.9s" dur="3s" keyTimes="0;0.1;0.2;0.3;1" repeatCount="indefinite" values="2;3;3;2;2"/><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.9s" dur="0.2s" to="0"/></path><path stroke-dasharray="4" stroke-dashoffset="4" d="M22 14v0.01"><animate attributeName="stroke-width" begin="1.1s" dur="3s" keyTimes="0;0.1;0.2;0.3;1" repeatCount="indefinite" values="2;3;3;2;2"/><animate fill="freeze" attributeName="stroke-dashoffset" begin="1.1s" dur="0.2s" to="0"/></path></g>`,
+  'bell': `<g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="4" d="M12 3v2"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.2s" values="4;0"/></path><path stroke-dasharray="30" stroke-dashoffset="30" d="M12 5c-3.31 0 -6 2.69 -6 6l0 6c-1 0 -2 1 -2 2h8M12 5c3.31 0 6 2.69 6 6l0 6c1 0 2 1 2 2h-8"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.2s" dur="0.4s" to="0"/></path><path stroke-dasharray="10" stroke-dashoffset="10" d="M10 20c0 1.1 0.9 2 2 2c1.1 0 2 -0.9 2 -2"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.7s" dur="0.2s" to="0"/></path></g>`,
+  'alert-circle-loop': `<g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" d="M12 3c4.97 0 9 4.03 9 9c0 4.97 -4.03 9 -9 9c-4.97 0 -9 -4.03 -9 -9c0 -4.97 4.03 -9 9 -9Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.6s" values="60;0"/></path><path stroke-dasharray="8" stroke-dashoffset="8" d="M12 7v6"><animate attributeName="stroke-width" begin="0.7s" dur="3s" keyTimes="0;0.1;0.2;0.3;1" repeatCount="indefinite" values="2;3;3;2;2"/><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.7s" dur="0.2s" to="0"/></path><path stroke-dasharray="4" stroke-dashoffset="4" d="M12 17v0.01"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.7s" dur="0.2s" to="0"/><animate attributeName="stroke-width" begin="1s" dur="3s" keyTimes="0;0.1;0.2;0.3;1" repeatCount="indefinite" values="2;3;3;2;2"/></path></g>`,
+  'close-circle': `<g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" d="M3 12c0 -4.97 4.03 -9 9 -9c4.97 0 9 4.03 9 9c0 4.97 -4.03 9 -9 9c-4.97 0 -9 -4.03 -9 -9Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.6s" values="60;0"/></path><path stroke-dasharray="8" stroke-dashoffset="8" d="M12 12l4 4M12 12l-4 -4M12 12l-4 4M12 12l4 -4"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" to="0"/></path></g>`,
+  'loading-loop': `<path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3c4.97 0 9 4.03 9 9"><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path>`,
+}
+
+// Hands turn: the minute hand every 2 s, the hour hand every 24 s
+export const CLOCK = `<g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 12V8.5"><animateTransform attributeName="transform" type="rotate" dur="24s" repeatCount="indefinite" values="0 12 12;360 12 12"/></path><path d="M12 12h5"><animateTransform attributeName="transform" type="rotate" dur="2s" repeatCount="indefinite" values="0 12 12;360 12 12"/></path></g>`
+
+// A sweep with its afterglow wedge turns every 3 s; the blip lights up as it passes
+export const RADAR = `<g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5" stroke-width="1.5" opacity=".5"/></g><g><animateTransform attributeName="transform" type="rotate" dur="3s" repeatCount="indefinite" values="0 12 12;360 12 12"/><path fill="currentColor" opacity=".35" d="M12 12V3A9 9 0 0 0 5.64 5.64Z"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M12 12V3"/></g><circle cx="15.5" cy="8" r="1.4" fill="currentColor"><animate attributeName="opacity" dur="3s" repeatCount="indefinite" keyTimes="0;.1;.12;.6;1" values=".15;.15;1;.15;.15"/></circle>`
+
+const BODIES = { ...LINE_MD, clock: CLOCK, radar: RADAR }
+
+export type AnimatedIconName = keyof typeof BODIES
+
+export default function AnimatedIcon({ name, className }: { name: AnimatedIconName; className?: string }) {
+  const svg = useRef<SVGSVGElement>(null)
+  useEffect(() => {
+    // reduced motion: jump past the draw-in and hold the icon still
+    if (svg.current && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      svg.current.setCurrentTime(5)
+      svg.current.pauseAnimations()
+    }
+  }, [name])
+  return (
+    <svg
+      ref={svg}
+      key={name}
+      className={`eurth-icon${className ? ' ' + className : ''}`}
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      focusable="false"
+      dangerouslySetInnerHTML={{ __html: BODIES[name] }}
+    />
+  )
+}
