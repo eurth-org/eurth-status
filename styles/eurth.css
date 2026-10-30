@@ -184,6 +184,7 @@ main .mantine-Container-root > .mantine-Center-root > .tabler-icon {
 /* ---------- monitor groups: instrument bezels ---------- */
 
 [data-mantine-color-scheme] main .mantine-Card-root {
+  padding: 0;
   background: transparent;
   box-shadow: none;
   max-width: calc(100% - 32px);
@@ -580,7 +581,7 @@ main [style*='background: gray'] {
   display: grid;
   grid-template-columns: minmax(0, 400px) minmax(0, 1fr);
   gap: 14px;
-  align-items: start;
+  align-items: stretch;
 }
 
 .eurth-scope {
@@ -614,6 +615,7 @@ main [style*='background: gray'] {
 }
 
 .eurth-datablock {
+  flex: 1;
   margin: 0 12px 12px;
   min-height: 62px;
   padding: 7px 9px;
@@ -642,27 +644,105 @@ main [style*='background: gray'] {
   min-width: 0;
 }
 
-/* the upstream overall status, compacted into the tower report bezel */
+/* the upstream overall status on two lines: icon beside the headline and the last sweep;
+   maintenance notices, when there are any, run full width underneath */
 .eurth-tower > .mantine-Container-root {
-  margin-top: 0;
-  padding: 14px 16px 16px;
+  /* upstream sets mt="xl" inline */
+  margin: 0 !important;
+  padding: 12px 16px;
   max-width: none;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: 14px;
+  align-items: center;
+}
+
+.eurth-tower > .mantine-Container-root > * {
+  grid-column: 1 / -1;
+}
+
+.eurth-tower > .mantine-Container-root > .mantine-Center-root {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+}
+
+.eurth-tower > .mantine-Container-root > h1 {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.eurth-tower > .mantine-Container-root > h1 + h5 {
+  grid-column: 2;
+  grid-row: 2;
 }
 
 .eurth-tower .mantine-Center-root > .tabler-icon {
-  width: 46px !important;
-  height: 46px !important;
+  width: 40px !important;
+  height: 40px !important;
+}
+
+[data-mantine-color-scheme] .eurth-tower h1.mantine-Title-root,
+[data-mantine-color-scheme] .eurth-tower h1 + h5.mantine-Title-root {
+  margin-top: 0 !important;
+  text-align: left !important;
 }
 
 [data-mantine-color-scheme] .eurth-tower h1.mantine-Title-root {
-  font-size: clamp(26px, 3.4vw, 38px);
-  margin-top: 6px;
+  font-size: clamp(22px, 2.6vw, 30px);
+}
+
+.eurth-tower-readouts {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border-top: 1px solid var(--eurth-rule);
+}
+
+.eurth-tower-readouts > div {
+  min-width: 0;
+  padding: 8px 12px 10px;
+  border-left: 1px solid var(--eurth-rule);
+}
+
+.eurth-tower-readouts > div:first-child {
+  border-left: 0;
+}
+
+.eurth-tower-readouts em {
+  display: block;
+  font-style: normal;
+  font-family: var(--eurth-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--eurth-dim);
+}
+
+.eurth-tower-readouts b {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--eurth-display);
+  font-weight: 600;
+  font-size: 22px;
+  letter-spacing: 0.04em;
+  color: var(--eurth-ink);
+}
+
+.eurth-tower-readouts b.ok {
+  color: var(--eurth-ok);
+}
+
+.eurth-tower-readouts b.warn {
+  color: var(--eurth-amber);
 }
 
 /* split-flap cards for the mainline fleet */
 .eurth-cards {
+  flex: 1;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: 1fr;
   gap: 10px;
 }
 
@@ -1050,6 +1130,18 @@ main [style*='background: gray'] {
   .eurth-card-name {
     font-size: 16px;
   }
+
+  .eurth-tower-readouts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .eurth-tower-readouts > div:nth-child(3) {
+    border-left: 0;
+  }
+
+  .eurth-tower-readouts > div:nth-child(n + 3) {
+    border-top: 1px solid var(--eurth-rule);
+  }
 }
 
 /* ---------- group headings ---------- */
@@ -1153,11 +1245,17 @@ body.eurth-nordo .eurth-clocks b {
 }
 
 main > header[class] > .mantine-Container-root > div:first-child::before {
-  -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><path d='M241.7 3.4c9-4.5 19.6-4.5 28.6 0l160 80c15.8 7.9 22.2 27.1 14.3 42.9C439 137.5 427.7 144 416 144v80c0 17.7-14.3 32-32 32h-4.9l32 192H480c17.7 0 32 14.3 32 32s-14.3 32-32 32H384.5c-.4 0-.8 0-1.1 0H128.6c-.4 0-.8 0-1.1 0H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l32-192H128c-17.7 0-32-14.3-32-32V144c-11.7 0-23-6.5-28.6-17.7c-7.9-15.8-1.5-35 14.3-42.9l160-80zM314.5 448L256 399.2 197.5 448h117zM197.8 256l-4.7 28.3L256 336.8l62.9-52.5L314.2 256H197.8zm-13.9 83.2l-11.2 67L218.5 368l-34.6-28.8zM293.5 368l45.8 38.1-11.2-67L293.5 368zM176 128c-8.8 0-16 7.2-16 16s7.2 16 16 16H336c8.8 0 16-7.2 16-16s-7.2-16-16-16H176z'/></svg>");
-  mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><path d='M241.7 3.4c9-4.5 19.6-4.5 28.6 0l160 80c15.8 7.9 22.2 27.1 14.3 42.9C439 137.5 427.7 144 416 144v80c0 17.7-14.3 32-32 32h-4.9l32 192H480c17.7 0 32 14.3 32 32s-14.3 32-32 32H384.5c-.4 0-.8 0-1.1 0H128.6c-.4 0-.8 0-1.1 0H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l32-192H128c-17.7 0-32-14.3-32-32V144c-11.7 0-23-6.5-28.6-17.7c-7.9-15.8-1.5-35 14.3-42.9l160-80zM314.5 448L256 399.2 197.5 448h117zM197.8 256l-4.7 28.3L256 336.8l62.9-52.5L314.2 256H197.8zm-13.9 83.2l-11.2 67L218.5 368l-34.6-28.8zM293.5 368l45.8 38.1-11.2-67L293.5 368zM176 128c-8.8 0-16 7.2-16 16s7.2 16 16 16H336c8.8 0 16-7.2 16-16s-7.2-16-16-16H176z'/></svg>");
+  -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><path d='M192 32c0-17.7 14.3-32 32-32C383.1 0 512 128.9 512 288c0 17.7-14.3 32-32 32s-32-14.3-32-32C448 164.3 347.7 64 224 64c-17.7 0-32-14.3-32-32zM60.6 220.6L164.7 324.7l28.4-28.4c-.7-2.6-1.1-5.4-1.1-8.3c0-17.7 14.3-32 32-32s32 14.3 32 32s-14.3 32-32 32c-2.9 0-5.6-.4-8.3-1.1l-28.4 28.4L291.4 451.4c14.5 14.5 11.8 38.8-7.3 46.3C260.5 506.9 234.9 512 208 512C93.1 512 0 418.9 0 304c0-26.9 5.1-52.5 14.4-76.1c7.5-19 31.8-21.8 46.3-7.3zM224 96c106 0 192 86 192 192c0 17.7-14.3 32-32 32s-32-14.3-32-32c0-70.7-57.3-128-128-128c-17.7 0-32-14.3-32-32s14.3-32 32-32z'/></svg>");
+  mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><path d='M192 32c0-17.7 14.3-32 32-32C383.1 0 512 128.9 512 288c0 17.7-14.3 32-32 32s-32-14.3-32-32C448 164.3 347.7 64 224 64c-17.7 0-32-14.3-32-32zM60.6 220.6L164.7 324.7l28.4-28.4c-.7-2.6-1.1-5.4-1.1-8.3c0-17.7 14.3-32 32-32s32 14.3 32 32s-14.3 32-32 32c-2.9 0-5.6-.4-8.3-1.1l-28.4 28.4L291.4 451.4c14.5 14.5 11.8 38.8-7.3 46.3C260.5 506.9 234.9 512 208 512C93.1 512 0 418.9 0 304c0-26.9 5.1-52.5 14.4-76.1c7.5-19 31.8-21.8 46.3-7.3zM224 96c106 0 192 86 192 192c0 17.7-14.3 32-32 32s-32-14.3-32-32c0-70.7-57.3-128-128-128c-17.7 0-32-14.3-32-32s14.3-32 32-32z'/></svg>");
 }
 
 [data-mantine-color-scheme] .mantine-Accordion-label > div > div:first-child::before {
   -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 576 512'><path d='M482.3 192c34.2 0 93.7 29 93.7 64c0 36-59.5 64-93.7 64l-116.6 0L265.2 495.9c-5.7 10-16.3 16.1-27.8 16.1l-56.2 0c-10.6 0-18.3-10.2-15.4-20.4l49-171.6L112 320 68.8 377.6c-3 4-7.8 6.4-12.8 6.4l-42 0c-7.8 0-14-6.3-14-14c0-1.3 .2-2.6 .5-3.9L32 256 .5 145.9c-.4-1.3-.5-2.6-.5-3.9c0-7.8 6.3-14 14-14l42 0c5 0 9.8 2.4 12.8 6.4L112 192l102.9 0-49-171.6C162.9 10.2 170.6 0 181.2 0l56.2 0c11.5 0 22.1 6.2 27.8 16.1L365.7 192l116.6 0z'/></svg>");
   mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 576 512'><path d='M482.3 192c34.2 0 93.7 29 93.7 64c0 36-59.5 64-93.7 64l-116.6 0L265.2 495.9c-5.7 10-16.3 16.1-27.8 16.1l-56.2 0c-10.6 0-18.3-10.2-15.4-20.4l49-171.6L112 320 68.8 377.6c-3 4-7.8 6.4-12.8 6.4l-42 0c-7.8 0-14-6.3-14-14c0-1.3 .2-2.6 .5-3.9L32 256 .5 145.9c-.4-1.3-.5-2.6-.5-3.9c0-7.8 6.3-14 14-14l42 0c5 0 9.8 2.4 12.8 6.4L112 192l102.9 0-49-171.6C162.9 10.2 170.6 0 181.2 0l56.2 0c11.5 0 22.1 6.2 27.8 16.1L365.7 192l116.6 0z'/></svg>");
+}
+
+/* heritage fleet (second group): a propeller plane, top-down, nose to the right like the jet above */
+[data-mantine-color-scheme] .mantine-Accordion-item + .mantine-Accordion-item .mantine-Accordion-label > div > div:first-child::before {
+  -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><path d='M40 244Q40 236 52 235L380 224Q420 224 430 256Q420 288 380 288L52 277Q40 276 40 268Z'/><path d='M244 230L262 40Q264 22 282 22L300 22Q318 22 318 40L336 230Z'/><path d='M244 282L262 472Q264 490 282 490L300 490Q318 490 318 472L336 282Z'/><path d='M58 250L72 158Q74 146 86 146L96 146Q108 146 108 158L116 250Z'/><path d='M58 262L72 354Q74 366 86 366L96 366Q108 366 108 354L116 262Z'/><circle cx='436' cy='256' r='20'/><rect x='452' y='146' width='30' height='220' rx='15'/></svg>");
+  mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><path d='M40 244Q40 236 52 235L380 224Q420 224 430 256Q420 288 380 288L52 277Q40 276 40 268Z'/><path d='M244 230L262 40Q264 22 282 22L300 22Q318 22 318 40L336 230Z'/><path d='M244 282L262 472Q264 490 282 490L300 490Q318 490 318 472L336 282Z'/><path d='M58 250L72 158Q74 146 86 146L96 146Q108 146 108 158L116 250Z'/><path d='M58 262L72 354Q74 366 86 366L96 366Q108 366 108 354L116 262Z'/><circle cx='436' cy='256' r='20'/><rect x='452' y='146' width='30' height='220' rx='15'/></svg>");
 }
