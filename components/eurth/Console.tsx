@@ -206,6 +206,22 @@ function TowerReadouts({ flights }: { flights: Flight[] }) {
   )
 }
 
+// An empty stand on the apron: fills out the last row of cards until the next site arrives
+function VacantStand({ stand }: { stand: number }) {
+  return (
+    <div className="eurth-card vacant" role="img" aria-label={`Stand ${stand} is vacant`}>
+      <span className="eurth-card-head">
+        <span className="cs">STAND {String(stand).padStart(2, '0')}</span>
+        <span className="st">Vacant</span>
+      </span>
+      <span className="eurth-card-name">Open stand</span>
+      <SplitFlap className="big" text="------" cells={6} />
+      <SplitFlap className="label" text="VACANT" cells={8} stagger={40} />
+      <span className="eurth-card-sub">Room for the next eurth.org site</span>
+    </div>
+  )
+}
+
 function DataBlock({ flight, id }: { flight?: Flight; id: string | null }) {
   if (id === GHOST_ID)
     return (
@@ -375,6 +391,9 @@ export default function EurthConsole({
                 selected={selected === f.id}
                 onSelect={() => setSelected(selected === f.id ? null : f.id)}
               />
+            ))}
+            {Array.from({ length: (3 - (core.length % 3)) % 3 }, (_, i) => (
+              <VacantStand key={i} stand={core.length + i + 1} />
             ))}
           </div>
         </div>

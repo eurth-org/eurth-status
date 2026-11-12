@@ -22,6 +22,7 @@ const CALLSIGNS: Record<string, string> = {
   eurth_map: 'MAP002',
   eurth_news: 'NWS003',
   eurth_gov: 'GOV004',
+  eurth_flag: 'FLG005',
   europans_homepage: 'EPN901',
 }
 
