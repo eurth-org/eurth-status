@@ -6,7 +6,7 @@ import { pageConfig } from '@/uptime.config'
 const SITE = 'https://status.eurth.org'
 const TITLE = pageConfig.title ?? 'Eurth Status'
 const DESCRIPTION =
-  'Is Eurth up? Live status, response times and 90-day uptime for eurth.org, map.eurth.org, news.eurth.org and gov.eurth.org, checked every minute.'
+  'Is Eurth up? Live status, response times and 90-day uptime for eurth.org and its map, news, gov and flag sites, checked every minute.'
 const IMAGE = `${SITE}/og-radar.png`
 const IMAGE_ALT =
   'Eurth Status: the Eurth sites as blips on a dark air-traffic radar, beside a departures board showing them all on time'

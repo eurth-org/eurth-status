@@ -738,12 +738,40 @@ main [style*='background: gray'] {
 }
 
 /* split-flap cards for the mainline fleet */
+/* three cards to a row; the console tops up the last row with vacant stands */
 .eurth-cards {
   flex: 1;
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   grid-auto-rows: 1fr;
   gap: 10px;
+}
+
+/* below 1040 px the card column is too narrow for three flip cards */
+@media (max-width: 1040px) {
+  .eurth-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* an empty stand waiting for the next site */
+.eurth-card.vacant {
+  --card-bg: var(--eurth-room);
+  cursor: default;
+  border-style: dashed;
+  border-left-width: 1px;
+  border-color: var(--eurth-rule);
+  background: transparent;
+}
+
+.eurth-card.vacant:hover {
+  --card-bg: var(--eurth-room);
+}
+
+.eurth-card.vacant .cs,
+.eurth-card.vacant .st,
+.eurth-card.vacant .eurth-card-name {
+  color: var(--eurth-off);
 }
 
 .eurth-card {

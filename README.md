@@ -5,6 +5,8 @@
 
 # ✔[UptimeFlare](https://github.com/lyc8503/UptimeFlare)
 
+> **Eurth fork:** this repository runs [status.eurth.org](https://status.eurth.org). What changed and what's next: [roadmap.md](roadmap.md).
+
 A more advanced, serverless, and free uptime monitoring & status page solution, powered by Cloudflare Workers, complete with a user-friendly interface.
 
 📢 **[[SECURITY ADVISORY](https://github.com/lyc8503/UptimeFlare/security/advisories/GHSA-36q9-v7p3-vj6v) 2026/03/04]** A vulnerability (CVE-2026-29779) that could expose monitor configuration and credentials in `uptime.config.ts` to clients was fixed. Versions between 2025-09-21 (from commit `41257c6`) and 2026-03-04 are affected. **Affected users are strongly advised to upgrade to the latest version.**
