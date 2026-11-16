@@ -8,6 +8,10 @@ This fork of [UptimeFlare](https://github.com/lyc8503/UptimeFlare) runs the Eurt
 - Outage notifications: the webhook in `uptime.config.ts` is still the example Telegram placeholder, so no alerts go anywhere yet.
 - Pick from the aviation ideas list (arrivals board, annunciator panel, NOTAM format, ATIS audio and more), proposed on 2026-10-30.
 
+## 2026-11-16
+
+- Monitor tools.eurth.org (the hub for the worldbuilding tools, live since 15 November) as `TLS006` in the mainline fleet. Six mainline sites fill both rows of cards, so the vacant stand is gone until a seventh arrives.
+
 ## 2026-11-12
 
 - Monitor flag.eurth.org (Flagwright, the flag maker) as `FLG005` in the mainline fleet.
