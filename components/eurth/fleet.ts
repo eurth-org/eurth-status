@@ -23,6 +23,7 @@ const CALLSIGNS: Record<string, string> = {
   eurth_news: 'NWS003',
   eurth_gov: 'GOV004',
   eurth_flag: 'FLG005',
+  eurth_tools: 'TLS006',
   europans_homepage: 'EPN901',
 }
 

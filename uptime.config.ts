@@ -28,7 +28,7 @@ const pageConfig: PageConfig = {
   ],
   // Monitors are shown per group, in this order; a monitor left out of every group is hidden
   group: {
-    'Mainline fleet': ['eurth_homepage', 'eurth_map', 'eurth_news', 'eurth_gov', 'eurth_flag'],
+    'Mainline fleet': ['eurth_homepage', 'eurth_map', 'eurth_news', 'eurth_gov', 'eurth_flag', 'eurth_tools'],
     'Heritage fleet': ['europans_homepage'],
   },
   customFooter: `<p class="eurth-footer">Monitoring for the <a href="${ref('https://eurth.org/')}" target="_blank">Eurth</a> community · powered by <a href="${ref('https://github.com/lyc8503/UptimeFlare')}" target="_blank">UptimeFlare</a>, made with ❤ by <a href="${ref('https://github.com/lyc8503')}" target="_blank">lyc8503</a>.</p>`,
@@ -133,7 +133,26 @@ const workerConfig: WorkerConfig = {
     }, // <-- Closes the fifth monitor object
 
     // -------------------------------------
-    // Monitor 6: europans_homepage
+    // Monitor 6: eurth_tools
+    // -------------------------------------
+    {
+      id: 'eurth_tools',
+      name: 'tools.eurth.org',
+      method: 'GET',
+      target: 'https://tools.eurth.org',
+      checkProxy: 'worker://weur',
+      tooltip: 'Tools, the hub for the worldbuilding tools',
+      statusPageLink: ref('https://tools.eurth.org'),
+      expectedCodes: [200],
+      timeout: 10000,
+      headers: {
+        'User-Agent': 'Uptimeflare',
+        Authorization: 'Bearer YOUR_TOKEN_HERE',
+      }, // <-- Closes the headers object
+    }, // <-- Closes the sixth monitor object
+
+    // -------------------------------------
+    // Monitor 7: europans_homepage
     // -------------------------------------
     {
       id: 'europans_homepage',
